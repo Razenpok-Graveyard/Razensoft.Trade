@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Razensoft.Trade.UI", "Razensoft.Trade.UI\Razensoft.Trade.UI.csproj", "{930AF938-3C27-4F3F-A977-CF15F8289E6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Razensoft.Trade", "Razensoft.Trade\Razensoft.Trade.csproj", "{3C1561C4-51CA-497B-8E2D-EBF9E568E041}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Razensoft.Trade.Pine", "Razensoft.Trade.Pine\Razensoft.Trade.Pine.csproj", "{7AF08EE3-FC3D-4956-9D0C-744C3923AAD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Razensoft.Trade.Pine.Tests", "Razensoft.Trade.Pine.Tests\Razensoft.Trade.Pine.Tests.csproj", "{D57A834D-47A1-448F-9631-DCA962E544C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{930AF938-3C27-4F3F-A977-CF15F8289E6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{930AF938-3C27-4F3F-A977-CF15F8289E6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{930AF938-3C27-4F3F-A977-CF15F8289E6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{930AF938-3C27-4F3F-A977-CF15F8289E6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C1561C4-51CA-497B-8E2D-EBF9E568E041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C1561C4-51CA-497B-8E2D-EBF9E568E041}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C1561C4-51CA-497B-8E2D-EBF9E568E041}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C1561C4-51CA-497B-8E2D-EBF9E568E041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AF08EE3-FC3D-4956-9D0C-744C3923AAD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AF08EE3-FC3D-4956-9D0C-744C3923AAD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AF08EE3-FC3D-4956-9D0C-744C3923AAD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AF08EE3-FC3D-4956-9D0C-744C3923AAD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D57A834D-47A1-448F-9631-DCA962E544C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D57A834D-47A1-448F-9631-DCA962E544C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D57A834D-47A1-448F-9631-DCA962E544C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D57A834D-47A1-448F-9631-DCA962E544C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
