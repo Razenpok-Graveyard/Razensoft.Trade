@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Razensoft.Trade.Pine.Statements;
 
 namespace Razensoft.Trade.Pine.Parsing
 {
@@ -33,6 +34,16 @@ namespace Razensoft.Trade.Pine.Parsing
         {
             if (_variables.ContainsKey(name))
             {
+                var currentValue = _variables[name];
+                if (currentValue.GetType() != value.GetType())
+                {
+                    if (!PineTypeSystem.IsConvertible(value.GetType(), currentValue.GetType()))
+                    {
+                        throw new InvalidCastException($"Cannot cast {value.GetType()}, to {currentValue.GetType()}");
+                    }
+
+                    value = PineTypeSystem.Convert(value, currentValue.GetType());
+                }
                 _variables[name] = value;
                 return;
             }
@@ -59,7 +70,6 @@ namespace Razensoft.Trade.Pine.Parsing
             }
 
             throw new Exception($"Variable {name} is not declared.");
-
         }
 
         public void DeclareFunction(PineScriptFunction function)

@@ -15,9 +15,15 @@ namespace Razensoft.Trade.Pine.Statements
 
         public override object Execute(PineScriptExecutionContext context)
         {
-            var series = (PineScriptSeries) _expression.Execute(context);
+            // TODO
+            var maybeSeries = _expression.Execute(context);
+            if (!(maybeSeries is PineSeries series))
+            {
+                return maybeSeries;
+            }
             var index = (int) _index.Execute(context);
             return series[index];
+
         }
     }
 }

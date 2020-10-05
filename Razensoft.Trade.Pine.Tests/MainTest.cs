@@ -29,7 +29,7 @@ namespace Razensoft.Trade.Pine.Parsing.Tests
             var statements = classVisitor.VisitScript(parser.script()).ToList();
             var script = new PineScript(statements);
 
-            var executionContext = new RootPineScriptExecutionContext();
+            var executionContext = new RootPineScriptExecutionContext(); 
             script.Execute(executionContext);
         }
     }

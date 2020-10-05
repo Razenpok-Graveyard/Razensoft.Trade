@@ -3,25 +3,23 @@ using System.Collections.Generic;
 
 namespace Razensoft.Trade.Pine.Parsing.BuiltinFunctions
 {
-    public class SimpleMovingAverage : BuiltinFunction
+    public class NATest : BuiltinFunction
     {
-        public SimpleMovingAverage() : base("sma", Parameters)
+        public NATest() : base("na", Parameters)
         {
         }
 
         private static IEnumerable<(string name, object defaultValue)> Parameters
             => new (string name, object defaultValue)[]
             {
-                ("source", null),
-                ("length", null)
+                ("x", null)
             };
 
         protected override object Execute(PineScriptExecutionContext parentContext, Dictionary<string, object> args)
         {
-            var source = args["source"];
-            var length = args["length"];
-            Console.WriteLine($"Simple Moving Average source {source} length {length}");
-            return new PineSeries<float>();
+            var x = args["x"];
+            Console.WriteLine($"NA Test x {x}");
+            return x is PineNA;
         }
     }
 }

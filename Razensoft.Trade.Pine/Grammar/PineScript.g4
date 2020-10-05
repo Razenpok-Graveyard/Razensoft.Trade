@@ -92,6 +92,13 @@ expression: ( MINUS? ( INT_LITERAL | FLOAT_LITERAL ) | BOOL_LITERAL | STR_LITERA
     | (NOT|MINUS)? functionCall #CallExpression
     | (NOT|MINUS)? ( seriesAccess | ID ) #IdentifierExpression
     | LPAR ( ternary | expression ) RPAR #GroupExpression
-    | expression (OR | AND | EQ | NEQ | GT | GE | LT | LE | PLUS | MINUS | MUL | DIV | MOD) expression #BinaryOperationExpression
+    | expression (MUL | DIV | MOD) expression #BinaryOperationExpression
+    | expression (PLUS | MINUS) expression #BinaryOperationExpression
+    | expression (GT | GE | LT | LE) expression #BinaryOperationExpression
+    | expression (EQ | NEQ) expression #BinaryOperationExpression
+    | expression OR expression #BinaryOperationExpression
+    | expression AND expression #BinaryOperationExpression
     ;
+    
+seriesAccess: ID LSQBR expression RSQBR;
 

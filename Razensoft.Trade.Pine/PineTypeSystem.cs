@@ -57,7 +57,7 @@ namespace Razensoft.Trade.Pine.Parsing
 
         public static object Convert(object value, Type to)
         {
-            if (!TypeCasts.TryGetValue(to, out var typeCast))
+            if (!TypeCasts.TryGetValue(value.GetType(), out var typeCast))
             {
                 throw new InvalidCastException($"Type {value.GetType()} can not be cast to {to}");
             }
@@ -94,14 +94,5 @@ namespace Razensoft.Trade.Pine.Parsing
 
             public bool IsConvertible(Type to) => _casts.ContainsKey(to);
         }
-    }
-
-    public class PineSeries<T> { }
-
-    public class PineColor { }
-
-    public class PineNA
-    {
-        public PineNA NA { get; } = new PineNA();
     }
 }

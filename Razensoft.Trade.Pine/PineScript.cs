@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Razensoft.Trade.Pine.Statements;
 
+[assembly: CLSCompliant(false)]
 namespace Razensoft.Trade.Pine.Parsing
 {
     public class PineScript

@@ -18,7 +18,7 @@ namespace Razensoft.Trade.Pine.Parsing.BuiltinFunctions
         protected override object Execute(PineScriptExecutionContext parentContext, Dictionary<string, object> args)
         {
             Console.WriteLine($"Average True Range length {args["length"]}");
-            return new PineScriptSeries();
+            return new PineSeries<float>();
         }
     }
 }

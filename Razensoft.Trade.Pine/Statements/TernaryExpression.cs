@@ -20,7 +20,16 @@ namespace Razensoft.Trade.Pine.Statements
 
         public override object Execute(PineScriptExecutionContext context)
         {
-            var condition = (bool) _condition.Execute(context);
+            var conditionObject = _condition.Execute(context);
+            bool condition;
+            if (conditionObject is PineSeries<bool> series)
+            {
+                condition = (bool) series[0];
+            }
+            else
+            {
+                condition = (bool) conditionObject;
+            }
             var executingExpression = condition ? _truthyExpression : _falsyExpression;
             return executingExpression.Execute(context);
         }
