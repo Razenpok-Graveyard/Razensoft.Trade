@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Razensoft.Trade.Pine.Statements;
 
 namespace Razensoft.Trade.Pine.Parsing
@@ -9,8 +11,8 @@ namespace Razensoft.Trade.Pine.Parsing
         private readonly PineScriptExecutionContext _parent;
         private readonly Dictionary<string, object> _variables
             = new Dictionary<string, object>();
-        private readonly Dictionary<string, PineScriptFunction> _functions
-            = new Dictionary<string, PineScriptFunction>();
+        private readonly Dictionary<string, List<PineScriptFunction>> _functions
+            = new Dictionary<string, List<PineScriptFunction>>();
 
         public PineScriptExecutionContext() : this(null) { }
 
@@ -74,9 +76,15 @@ namespace Razensoft.Trade.Pine.Parsing
 
         public void DeclareFunction(PineScriptFunction function)
         {
-            if (!_functions.ContainsKey(function.Name))
+            if (!_functions.TryGetValue(function.Name, out var list))
             {
-                _functions.Add(function.Name, function);
+                list = new List<PineScriptFunction>();
+                _functions.Add(function.Name, list);
+            }
+
+            if (!list.Contains(function))
+            {
+                list.Add(function);
                 return;
             }
 
@@ -85,10 +93,23 @@ namespace Razensoft.Trade.Pine.Parsing
 
         public object CallFunction(string name, object[] positionalArgs, Dictionary<string, object> namedArgs)
         {
-            if (_functions.ContainsKey(name))
+            if (_functions.TryGetValue(name, out var list))
             {
-                var function = _functions[name];
-                return function.Execute(this, positionalArgs, namedArgs);
+                foreach (var function in list)
+                {
+                    if (function.CanAccept(positionalArgs, namedArgs))
+                    {
+                        return function.Execute(this, positionalArgs, namedArgs);
+                    }
+                }
+
+                var arguments = positionalArgs
+                    .Select(arg => arg.GetType().Name)
+                    .ToList();
+                arguments.AddRange(namedArgs
+                    .Select(kvp => $"{kvp.Key}={kvp.Value.GetType().Name}"));
+
+                throw new Exception($"Cannot call \"{name}\" with arguments ({string.Join(", ", arguments)})");
             }
 
             if (_parent != null)

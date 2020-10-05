@@ -24,12 +24,12 @@ namespace Razensoft.Trade.Pine.Parsing.Tests
             var lexer = new PineScriptLexer(inputStream);
             var tokens = new CommonTokenStream(lexer);
             var parser = new PineScriptParser(tokens);
-
+            
             var classVisitor = new PineScriptVisitor();
             var statements = classVisitor.VisitScript(parser.script()).ToList();
             var script = new PineScript(statements);
 
-            var executionContext = new RootPineScriptExecutionContext(); 
+            var executionContext = new RootPineScriptExecutionContext(new DefaultBuiltinProvider());
             script.Execute(executionContext);
         }
     }

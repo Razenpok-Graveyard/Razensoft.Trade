@@ -42,6 +42,12 @@ namespace Razensoft.Trade.Pine.Parsing
             AddTypeCast<string, PineSeries<string>>(value => new PineSeries<string>());
 
             AddTypeCast<string, PineSeries<PineColor>>(value => new PineSeries<PineColor>());
+
+            AddTypeCast<PineSeries<int>, int>(value => (int) value[0]);
+            AddTypeCast<PineSeries<float>, float>(value => (float) value[0]);
+            AddTypeCast<PineSeries<bool>, bool>(value => (bool) value[0]);
+            AddTypeCast<PineSeries<string>, string>(value => (string) value[0]);
+            AddTypeCast<PineSeries<PineColor>, PineColor>(value => (PineColor) value[0]);
         }
 
         private static void AddTypeCast<TFrom, TTo>(Func<TFrom, TTo> cast)

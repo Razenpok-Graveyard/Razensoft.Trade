@@ -11,6 +11,8 @@ namespace Razensoft.Trade.Pine.Parsing
 
         public string Name { get; }
 
+        public abstract bool CanAccept(object[] positionalArgs, Dictionary<string, object> namedArgs);
+
         public abstract object Execute(
             PineScriptExecutionContext parentContext,
             object[] positionalArgs,
