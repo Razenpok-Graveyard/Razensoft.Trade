@@ -2,6 +2,10 @@
 {
     public class PineNA
     {
-        public PineNA NA { get; } = new PineNA();
+        private PineNA()
+        {
+        }
+
+        public static PineNA NA { get; } = new PineNA();
     }
 }
