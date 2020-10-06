@@ -13,6 +13,12 @@ namespace Razensoft.Trade.Pine.Parsing
             Console.WriteLine($"Strategy {title}");
         }
 
+        public override void strategy__entry(string id, bool @long, float qty, float limit, float stop, string oca_name, string oca_type,
+            string comment, bool when, string alert_message)
+        {
+            Console.WriteLine($"Strategy entry {id}");
+        }
+
         public override bool input(bool defval, string title, string type, bool confirm)
         {
             Console.WriteLine($"Input bool {title}");

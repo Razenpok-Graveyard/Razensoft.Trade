@@ -10,15 +10,37 @@ namespace Razensoft.Trade.Pine.Parsing
             set => throw new NotImplementedException();
         }
     }
-    
+
     public class PineSeries<T> : PineSeries
     {
+        private readonly T[] _values;
+
+        public PineSeries() : this(new T[] { }) { }
+
+        public PineSeries(T[] values)
+        {
+            _values = values;
+        }
+
         public override object this[int index]
         {
             get
             {
-                if (typeof(T) == typeof(string)) return string.Empty;
-                if (typeof(T) == typeof(PineColor)) return new PineColor();
+                if (index < _values.Length)
+                {
+                    return _values[index];
+                }
+
+                if (typeof(T) == typeof(string))
+                {
+                    return string.Empty;
+                }
+
+                if (typeof(T) == typeof(PineColor))
+                {
+                    return new PineColor();
+                }
+
                 return default(T);
             }
             set => throw new NotImplementedException();

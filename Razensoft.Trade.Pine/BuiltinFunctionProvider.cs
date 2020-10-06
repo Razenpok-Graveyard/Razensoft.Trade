@@ -13,6 +13,13 @@ namespace Razensoft.Trade.Pine.Parsing
             throw new NotImplementedException();
         }
 
+        public virtual void strategy__entry(
+            string id, bool @long, float qty, float limit, float stop, string oca_name, string oca_type, string comment,
+            bool when, string alert_message)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual bool input(bool defval, string title, string type, bool confirm)
         {
             throw new NotImplementedException();
