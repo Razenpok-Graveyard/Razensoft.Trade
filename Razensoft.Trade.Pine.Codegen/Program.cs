@@ -61,6 +61,10 @@ namespace Razensoft.Trade.Pine.Codegen
         private static IEnumerable<FunctionDefinition> ProcessFunction(HtmlNode node)
         {
             var name = node.Descendants("h3").First().InnerText;
+            if (name == "input")
+            {
+                yield break;
+            }
             var divs = node.Descendants("div");
             var description = divs.First().InnerText;
 
@@ -104,7 +108,7 @@ namespace Razensoft.Trade.Pine.Codegen
             sb.AppendLine();
             sb.AppendLine("namespace Razensoft.Trade.Pine");
             sb.AppendLine("{");
-            sb.AppendLine("    public abstract class BuiltinVariableProvider");
+            sb.AppendLine("    public abstract partial class BuiltinVariableProvider");
             sb.AppendLine("    {");
 
             foreach (var variable in variables)
@@ -126,7 +130,7 @@ namespace Razensoft.Trade.Pine.Codegen
             sb.AppendLine("}");
 
             var solutionDirectory = GetSolutionDirectory();
-            var targetPath = Path.Combine(solutionDirectory, "Razensoft.Trade.Pine", "BuiltinVariableProvider.cs");
+            var targetPath = Path.Combine(solutionDirectory, "Razensoft.Trade.Pine", "BuiltinVariableProvider.Generated.cs");
             File.WriteAllText(targetPath, sb.ToString());
         }
 
@@ -137,10 +141,11 @@ namespace Razensoft.Trade.Pine.Codegen
             sb.AppendLine();
             sb.AppendLine("namespace Razensoft.Trade.Pine");
             sb.AppendLine("{");
-            sb.AppendLine("    public abstract class BuiltinFunctionProvider");
+            sb.AppendLine("    public abstract partial class BuiltinFunctionProvider");
             sb.AppendLine("    {");
 
-            var filteredFunctions = functions.GroupBy(f => f.Name)
+            var filteredFunctions = functions
+                .GroupBy(f => f.Name)
                 .SelectMany(g => g.DistinctBy(f => f.Parameters.Count));
             foreach (var function in filteredFunctions)
             {
@@ -159,7 +164,15 @@ namespace Razensoft.Trade.Pine.Codegen
 
                 sb.AppendLine(indent + "/// </summary>");
                 sb.Append(indent + $"public virtual {type} {name}");
-                var parametersString = string.Join(", ", function.Parameters.Select(p => $"object {p}"));
+                var parametersString = string.Join(", ", function.Parameters.Select(p =>
+                {
+                    var parameterName = p;
+                    if (!IsValidIdentifier(parameterName))
+                    {
+                        parameterName = $"@{parameterName}";
+                    }
+                    return $"object {parameterName}";
+                }));
                 if (function.Parameters.Count <= 3)
                 {
                     sb.AppendLine($"({parametersString})");
@@ -198,7 +211,7 @@ namespace Razensoft.Trade.Pine.Codegen
             sb.AppendLine("}");
 
             var solutionDirectory = GetSolutionDirectory();
-            var targetPath = Path.Combine(solutionDirectory, "Razensoft.Trade.Pine", "BuiltinFunctionProvider.cs");
+            var targetPath = Path.Combine(solutionDirectory, "Razensoft.Trade.Pine", "BuiltinFunctionProvider.Generated.cs");
             File.WriteAllText(targetPath, sb.ToString());
         }
 
@@ -297,6 +310,10 @@ namespace Razensoft.Trade.Pine.Codegen
             {
                 "bool",
                 "string",
+                "int",
+                "char",
+                "base",
+                "float",
                 "long"
             }.Contains(identifier);
         }
