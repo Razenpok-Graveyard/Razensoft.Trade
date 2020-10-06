@@ -17,6 +17,32 @@ namespace Razensoft.Trade.Pine.Parsing
             _provider = provider;
         }
 
+        public override bool CanAcceptAsIs(object[] positionalArgs, Dictionary<string, object> namedArgs)
+        {
+            var parameters = _methodInfo.GetParameters();
+            var implicitArgs = parameters.ToList();
+            for (int i = 0; i < positionalArgs.Length; i++)
+            {
+                var parameterInfo = parameters[i];
+                if (positionalArgs[i].GetType() != parameterInfo.ParameterType)
+                {
+                    return false;
+                }
+                implicitArgs.Remove(parameters[i]);
+            }
+
+            foreach (var (name, value) in namedArgs)
+            {
+                var parameter = implicitArgs.Find(a => a.Name == name);
+                if (parameter == null || value.GetType() != parameter.ParameterType)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public override bool CanAccept(object[] positionalArgs, Dictionary<string, object> namedArgs)
         {
             static bool IsAssignable(object arg, ParameterInfo parameterInfo)
@@ -40,12 +66,7 @@ namespace Razensoft.Trade.Pine.Parsing
             foreach (var (name, value) in namedArgs)
             {
                 var parameter = implicitArgs.Find(a => a.Name == name);
-                if (parameter == null)
-                {
-                    return false;
-                }
-
-                if (!IsAssignable(value, parameter))
+                if (parameter == null || !IsAssignable(value, parameter))
                 {
                     return false;
                 }

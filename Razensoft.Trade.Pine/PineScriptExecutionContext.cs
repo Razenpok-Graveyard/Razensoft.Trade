@@ -97,6 +97,13 @@ namespace Razensoft.Trade.Pine.Parsing
             {
                 foreach (var function in list)
                 {
+                    if (function.CanAcceptAsIs(positionalArgs, namedArgs))
+                    {
+                        return function.Execute(this, positionalArgs, namedArgs);
+                    }
+                }
+                foreach (var function in list)
+                {
                     if (function.CanAccept(positionalArgs, namedArgs))
                     {
                         return function.Execute(this, positionalArgs, namedArgs);

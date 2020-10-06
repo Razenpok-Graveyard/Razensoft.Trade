@@ -15,6 +15,11 @@ namespace Razensoft.Trade.Pine.Parsing
                 .ToArray();
         }
 
+        public override bool CanAcceptAsIs(object[] positionalArgs, Dictionary<string, object> namedArgs)
+        {
+            return true;
+        }
+
         public override bool CanAccept(object[] positionalArgs, Dictionary<string, object> namedArgs)
         {
             return true;
