@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Razensoft.Trade.Pine.Parsing
+namespace Razensoft.Trade.Pine
 {
     public class RootPineScriptExecutionContext : PineScriptExecutionContext
     {

@@ -3,7 +3,7 @@ using System.Linq;
 using Antlr4.Runtime.Tree;
 using Razensoft.Trade.Pine.Statements;
 
-namespace Razensoft.Trade.Pine.Parsing
+namespace Razensoft.Trade.Pine
 {
     public class PineScriptStatementVisitor : PineScriptBaseVisitor<PineScriptStatement>
     {

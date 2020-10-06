@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 
-namespace Razensoft.Trade.Pine.Parsing
+namespace Razensoft.Trade.Pine
 {
     public class BuiltinFunction : PineScriptFunction
     {

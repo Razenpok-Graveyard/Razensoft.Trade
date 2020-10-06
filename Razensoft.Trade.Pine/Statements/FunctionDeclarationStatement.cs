@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Razensoft.Trade.Pine.Parsing;
 
 namespace Razensoft.Trade.Pine.Statements
 {

@@ -1,6 +1,4 @@
-﻿using Razensoft.Trade.Pine.Parsing;
-
-namespace Razensoft.Trade.Pine.Statements
+﻿namespace Razensoft.Trade.Pine.Statements
 {
     public class VariableAssignmentStatement : PineScriptStatement
     {

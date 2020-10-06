@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Razensoft.Trade.Pine.Parsing;
 
 namespace Razensoft.Trade.Pine.Statements
 {

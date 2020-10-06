@@ -1,4 +1,4 @@
-﻿namespace Razensoft.Trade.Pine.Parsing
+﻿namespace Razensoft.Trade.Pine
 {
     internal static class StringExtensions
     {

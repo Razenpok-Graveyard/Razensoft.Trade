@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Razensoft.Trade.Pine.Parsing
+namespace Razensoft.Trade.Pine
 {
     public abstract class PineScriptFunction
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Razensoft.Trade.Pine.Parsing
+namespace Razensoft.Trade.Pine
 {
     public class DefaultBuiltinFunctionProvider : BuiltinFunctionProvider
     {

@@ -6,7 +6,7 @@ using Antlr4.Runtime;
 using Razensoft.Trade.Pine.Statements;
 
 [assembly: CLSCompliant(false)]
-namespace Razensoft.Trade.Pine.Parsing
+namespace Razensoft.Trade.Pine
 {
     public class PineScript
     {
