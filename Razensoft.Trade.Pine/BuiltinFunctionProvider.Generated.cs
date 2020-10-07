@@ -7,7 +7,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Absolute value of x is x if x &gt;= 0, or -x otherwise.
         /// </summary>
-        public virtual int abs(object x)
+        public virtual long abs(object x)
         {
             throw new NotImplementedException();
         }
@@ -105,7 +105,7 @@ namespace Razensoft.Trade.Pine
         /// The function returns the index of the first occurrence of the value,
         /// or -1 if the value is not found.
         /// </summary>
-        public virtual PineSeries<int> array__indexof(object id, object value)
+        public virtual PineSeries<long> array__indexof(object id, object value)
         {
             throw new NotImplementedException();
         }
@@ -121,7 +121,7 @@ namespace Razensoft.Trade.Pine
         /// The function returns the index of the last occurrence of the value, or
         /// -1 if the value is not found.
         /// </summary>
-        public virtual PineSeries<int> array__lastindexof(object id, object value)
+        public virtual PineSeries<long> array__lastindexof(object id, object value)
         {
             throw new NotImplementedException();
         }
@@ -230,7 +230,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// The function returns the number of elements in an array.
         /// </summary>
-        public virtual PineSeries<int> array__size(object id)
+        public virtual PineSeries<long> array__size(object id)
         {
             throw new NotImplementedException();
         }
@@ -328,7 +328,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Counts the number of bars since the last time the condition was true.
         /// </summary>
-        public virtual PineSeries<int> barssince(object condition)
+        public virtual PineSeries<long> barssince(object condition)
         {
             throw new NotImplementedException();
         }
@@ -382,7 +382,7 @@ namespace Razensoft.Trade.Pine
         /// The ceil function returns the smallest (closest to negative infinity)
         /// integer that is greater than or equal to the argument.
         /// </summary>
-        public virtual int ceil(object x)
+        public virtual long ceil(object x)
         {
             throw new NotImplementedException();
         }
@@ -484,28 +484,28 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// dayofmonth(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> dayofmonth(object time)
+        public virtual PineSeries<long> dayofmonth(object time)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// dayofmonth(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> dayofmonth(object time, object timezone)
+        public virtual PineSeries<long> dayofmonth(object time, object timezone)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// dayofweek(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> dayofweek(object time)
+        public virtual PineSeries<long> dayofweek(object time)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// dayofweek(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> dayofweek(object time, object timezone)
+        public virtual PineSeries<long> dayofweek(object time, object timezone)
         {
             throw new NotImplementedException();
         }
@@ -592,7 +592,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// floor(x) → integer
         /// </summary>
-        public virtual int floor(object x)
+        public virtual long floor(object x)
         {
             throw new NotImplementedException();
         }
@@ -620,14 +620,14 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Highest value offset for a given number of bars back.
         /// </summary>
-        public virtual PineSeries<int> highestbars(object source, object length)
+        public virtual PineSeries<long> highestbars(object source, object length)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// Highest value offset for a given number of bars back.
         /// </summary>
-        public virtual PineSeries<int> highestbars(object length)
+        public virtual PineSeries<long> highestbars(object length)
         {
             throw new NotImplementedException();
         }
@@ -650,14 +650,14 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// hour(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> hour(object time)
+        public virtual PineSeries<long> hour(object time)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// hour(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> hour(object time, object timezone)
+        public virtual PineSeries<long> hour(object time, object timezone)
         {
             throw new NotImplementedException();
         }
@@ -671,7 +671,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Casts na or truncates float value to int
         /// </summary>
-        public virtual int @int(object x)
+        public virtual long @int(object x)
         {
             throw new NotImplementedException();
         }
@@ -746,7 +746,7 @@ namespace Razensoft.Trade.Pine
         /// Returns UNIX time or bar index (depending on the last xloc value set)
         /// of this label's position
         /// </summary>
-        public virtual PineSeries<int> label__get_x(object id)
+        public virtual PineSeries<long> label__get_x(object id)
         {
             throw new NotImplementedException();
         }
@@ -878,7 +878,7 @@ namespace Razensoft.Trade.Pine
         /// Returns UNIX time or bar index (depending on the last xloc value set)
         /// of the first point of the line
         /// </summary>
-        public virtual PineSeries<int> line__get_x1(object id)
+        public virtual PineSeries<long> line__get_x1(object id)
         {
             throw new NotImplementedException();
         }
@@ -886,7 +886,7 @@ namespace Razensoft.Trade.Pine
         /// Returns UNIX time or bar index (depending on the last xloc value set)
         /// of the second point of the line
         /// </summary>
-        public virtual PineSeries<int> line__get_x2(object id)
+        public virtual PineSeries<long> line__get_x2(object id)
         {
             throw new NotImplementedException();
         }
@@ -1046,14 +1046,14 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Lowest value offset for a given number of bars back.
         /// </summary>
-        public virtual PineSeries<int> lowestbars(object source, object length)
+        public virtual PineSeries<long> lowestbars(object source, object length)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// Lowest value offset for a given number of bars back.
         /// </summary>
-        public virtual PineSeries<int> lowestbars(object length)
+        public virtual PineSeries<long> lowestbars(object length)
         {
             throw new NotImplementedException();
         }
@@ -1089,21 +1089,21 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Returns the smallest of multiple values
         /// </summary>
-        public virtual int min(object x1, object x2, object x10)
+        public virtual long min(object x1, object x2, object x10)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// minute(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> minute(object time)
+        public virtual PineSeries<long> minute(object time)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// minute(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> minute(object time, object timezone)
+        public virtual PineSeries<long> minute(object time, object timezone)
         {
             throw new NotImplementedException();
         }
@@ -1118,14 +1118,14 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// month(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> month(object time)
+        public virtual PineSeries<long> month(object time)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// month(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> month(object time, object timezone)
+        public virtual PineSeries<long> month(object time, object timezone)
         {
             throw new NotImplementedException();
         }
@@ -1318,7 +1318,7 @@ namespace Razensoft.Trade.Pine
         /// The round function returns the value of the argument rounded to the
         /// nearest integer, with ties rounding up.
         /// </summary>
-        public virtual int round(object x)
+        public virtual long round(object x)
         {
             throw new NotImplementedException();
         }
@@ -1342,14 +1342,14 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// second(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> second(object time)
+        public virtual PineSeries<long> second(object time)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// second(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> second(object time, object timezone)
+        public virtual PineSeries<long> second(object time, object timezone)
         {
             throw new NotImplementedException();
         }
@@ -1650,7 +1650,7 @@ namespace Razensoft.Trade.Pine
         /// Function time returns UNIX time of current bar for the specified
         /// resolution and session or NaN if time point is out-of-session.
         /// </summary>
-        public virtual PineSeries<int> time(object resolution, object session)
+        public virtual PineSeries<long> time(object resolution, object session)
         {
             throw new NotImplementedException();
         }
@@ -1658,14 +1658,14 @@ namespace Razensoft.Trade.Pine
         /// Function time returns UNIX time of current bar for the specified
         /// resolution and session or NaN if time point is out-of-session.
         /// </summary>
-        public virtual PineSeries<int> time(object resolution)
+        public virtual PineSeries<long> time(object resolution)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// Function timestamp returns UNIX time of specified date and time.
         /// </summary>
-        public virtual int timestamp(
+        public virtual long timestamp(
             object year, object month, object day, object hour, object minute,
             object second)
         {
@@ -1674,7 +1674,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Function timestamp returns UNIX time of specified date and time.
         /// </summary>
-        public virtual int timestamp(
+        public virtual long timestamp(
             object timezone, object year, object month, object day, object hour,
             object minute, object second)
         {
@@ -1744,14 +1744,14 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// weekofyear(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> weekofyear(object time)
+        public virtual PineSeries<long> weekofyear(object time)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// weekofyear(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> weekofyear(object time, object timezone)
+        public virtual PineSeries<long> weekofyear(object time, object timezone)
         {
             throw new NotImplementedException();
         }
@@ -1774,14 +1774,14 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// year(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> year(object time)
+        public virtual PineSeries<long> year(object time)
         {
             throw new NotImplementedException();
         }
         /// <summary>
         /// year(time) → series[integer]
         /// </summary>
-        public virtual PineSeries<int> year(object time, object timezone)
+        public virtual PineSeries<long> year(object time, object timezone)
         {
             throw new NotImplementedException();
         }

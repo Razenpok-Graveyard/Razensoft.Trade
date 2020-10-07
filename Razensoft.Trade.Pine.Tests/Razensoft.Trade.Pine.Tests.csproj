@@ -21,7 +21,7 @@
       <None Update="files\SuperTrend STRATEGY\script.pine">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="files\SuperTrend STRATEGY\SELL Entry.json">
+      <None Update="files\SuperTrend STRATEGY\SELL.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

@@ -4,6 +4,8 @@ namespace Razensoft.Trade.Pine
 {
     public abstract partial class BuiltinFunctionProvider
     {
+        public BuiltinVariableProvider VariableProvider { get; set; }
+
         /// <summary>
         /// Adds an input to your script indicator. User can see and edit inputs
         /// on the Format Object dialog of the script study. Script inputs look
@@ -25,7 +27,7 @@ namespace Razensoft.Trade.Pine
             throw new NotImplementedException();
         }
 
-        public virtual int max(int x1, int x2)
+        public virtual long max(long x1, long x2)
         {
             throw new NotImplementedException();
         }

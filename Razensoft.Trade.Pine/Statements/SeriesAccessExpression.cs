@@ -19,7 +19,7 @@
             {
                 return maybeSeries;
             }
-            var index = (int) _index.Execute(context);
+            var index = (int) (long) _index.Execute(context);
             return series[index];
 
         }

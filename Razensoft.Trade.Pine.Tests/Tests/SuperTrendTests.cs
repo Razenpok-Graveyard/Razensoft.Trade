@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
@@ -15,16 +16,16 @@ namespace Razensoft.Trade.Pine.Parsing.Tests.Tests
         {
             _script = PineScript.FromFile("files/SuperTrend STRATEGY/script.pine");
         }
-        
+
         [Test]
         public void Should_not_call_entry_when_not_appropriate()
         {
-            var data = HistoricalData.FromFile("files/SuperTrend STRATEGY/SELL Entry.json");
+            var data = HistoricalData.FromFile("files/SuperTrend STRATEGY/SELL.json");
             for (var i = 0; i < data.Length; i++)
             {
                 data.Position = i;
                 var functionProvider = new StubBuiltinFunctionProvider();
-                var variableProvider = new DefaultBuiltinVariableProvider(functionProvider, data);
+                var variableProvider = new DefaultBuiltinVariableProvider(data);
                 var executionContext = new RootPineScriptExecutionContext(variableProvider, functionProvider);
                 _script.Execute(executionContext);
                 functionProvider.EntryId.Should().Be(null);
@@ -34,15 +35,19 @@ namespace Razensoft.Trade.Pine.Parsing.Tests.Tests
         private class StubBuiltinFunctionProvider : DefaultBuiltinFunctionProvider
         {
             public string EntryId { get; private set; }
-            
-            public override int timestamp(object year, object month, object day, object hour, object minute, object second)
-            {
-                return 0;
-            }
 
-            public override PineSeries<int> barssince(object condition)
+            public override long timestamp(object year, object month, object day, object hour, object minute,
+                object second)
             {
-                return new PineSeries<int>();
+                var dateTimeOffset = new DateTimeOffset(
+                    year == null ? 0 : (int) (long) year,
+                    month == null ? 0 : (int) (long) month,
+                    day == null ? 0 : (int) (long) day,
+                    hour == null ? 0 : (int) (long) hour,
+                    minute == null ? 0 : (int) (long) minute,
+                    second == null ? 0 : (int) (long) second,
+                    TimeSpan.Zero);
+                return dateTimeOffset.ToUnixTimeMilliseconds();
             }
 
             public override object input(
@@ -57,6 +62,11 @@ namespace Razensoft.Trade.Pine.Parsing.Tests.Tests
                 return new PineSeries<float>();
             }
 
+            public override PineSeries<float> rma(object source, object length)
+            {
+                return new PineSeries<float>();
+            }
+
             public override PineSeries<float> sma(object source, object length)
             {
                 return new PineSeries<float>();
@@ -67,9 +77,15 @@ namespace Razensoft.Trade.Pine.Parsing.Tests.Tests
                 return new PineSeries<float>();
             }
 
-            public override void strategy__entry(object id, object @long, object qty, object limit, object stop, object oca_name, object oca_type,
+            public override void strategy__entry(object id, object @long, object qty, object limit, object stop,
+                object oca_name, object oca_type,
                 object comment, object when, object alert_message)
             {
+                if (EntryId != null)
+                {
+                    Assert.Fail();
+                }
+
                 EntryId = (string) id;
             }
 
@@ -78,9 +94,7 @@ namespace Razensoft.Trade.Pine.Parsing.Tests.Tests
                 object pyramiding, object calc_on_order_fills, object calc_on_every_tick, object max_bars_back,
                 object backtest_fill_limits_assumption, object default_qty_type, object default_qty_value,
                 object initial_capital, object currency, object slippage, object commission_type,
-                object commission_value, object process_orders_on_close, object close_entries_rule)
-            {
-            }
+                object commission_value, object process_orders_on_close, object close_entries_rule) { }
 
             public override object plot(
                 object series, object title, object color, object linewidth, object style, object trackprice,
@@ -92,16 +106,17 @@ namespace Razensoft.Trade.Pine.Parsing.Tests.Tests
 
             public override void plotshape(
                 object series, object title, object style, object location, object color, object transp, object offset,
-                object text, object textcolor, object editable, object size, object show_last, object display)
-            {
-            }
+                object text, object textcolor, object editable, object size, object show_last, object display) { }
 
-            public override void fill(object plot1, object plot2, object color, object transp, object title, object editable, object show_last)
-            {
-            }
+            public override void fill(object plot1, object plot2, object color, object transp, object title,
+                object editable, object show_last) { }
 
-            public override void barcolor(object color, object offset, object editable, object show_last, object title)
+            public override void barcolor(object color, object offset, object editable, object show_last,
+                object title) { }
+
+            public override PineSeries<long> barssince(object condition)
             {
+                return new PineSeries<long>();
             }
         }
 
@@ -122,7 +137,7 @@ namespace Razensoft.Trade.Pine.Parsing.Tests.Tests
                 Length = open.Count;
                 Position = 0;
             }
-            
+
             public int Length { get; }
 
             public PineSeries<float> Open { get; private set; }

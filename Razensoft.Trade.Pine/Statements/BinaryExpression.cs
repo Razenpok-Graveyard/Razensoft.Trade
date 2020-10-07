@@ -72,12 +72,12 @@ namespace Razensoft.Trade.Pine.Statements
 
             protected BinaryOperation()
             {
-                _typeOperations.Add(typeof(int), (left, right) => Execute((int) left, (int) right));
+                _typeOperations.Add(typeof(long), (left, right) => Execute((long) left, (long) right));
                 _typeOperations.Add(typeof(float), (left, right) => Execute((float) left, (float) right));
                 _typeOperations.Add(typeof(bool), (left, right) => Execute((bool) left, (bool) right));
                 _typeOperations.Add(typeof(string), (left, right) => Execute((string) left, (string) right));
                 _typeOperations.Add(typeof(PineColor), (left, right) => Execute((PineColor) left, (PineColor) right));
-                _typeOperations.Add(typeof(PineSeries<int>), (left, right) => Execute((PineSeries<int>) left, (PineSeries<int>) right));
+                _typeOperations.Add(typeof(PineSeries<long>), (left, right) => Execute((PineSeries<long>) left, (PineSeries<long>) right));
                 _typeOperations.Add(typeof(PineSeries<float>), (left, right) => Execute((PineSeries<float>) left, (PineSeries<float>) right));
                 _typeOperations.Add(typeof(PineSeries<bool>), (left, right) => Execute((PineSeries<bool>) left, (PineSeries<bool>) right));
                 _typeOperations.Add(typeof(PineSeries<string>), (left, right) => Execute((PineSeries<string>) left, (PineSeries<string>) right));
@@ -123,7 +123,7 @@ namespace Razensoft.Trade.Pine.Statements
                 return typeOperation.Invoke(left, right);
             }
 
-            protected virtual object Execute(int left, int right)
+            protected virtual object Execute(long left, long right)
             {
                 throw new NotSupportedException();
             }
@@ -148,7 +148,7 @@ namespace Razensoft.Trade.Pine.Statements
                 throw new NotSupportedException();
             }
 
-            protected virtual object Execute(PineSeries<int> left, PineSeries<int> right)
+            protected virtual object Execute(PineSeries<long> left, PineSeries<long> right)
             {
                 throw new NotSupportedException();
             }
@@ -207,7 +207,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class EqualsOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left == right;
                 }
@@ -232,7 +232,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left == right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.Equals(left, right);
                 }
@@ -247,7 +247,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class NotEqualsOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left != right;
                 }
@@ -272,7 +272,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left != right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.NotEquals(left, right);
                 }
@@ -287,7 +287,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class GreaterThanOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left > right;
                 }
@@ -297,7 +297,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left > right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.GreaterThan(left, right);
                 }
@@ -312,7 +312,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class GreaterThanOrEqualsOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left >= right;
                 }
@@ -322,7 +322,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left >= right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.GreaterThanOrEquals(left, right);
                 }
@@ -337,7 +337,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class LowerThanOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left < right;
                 }
@@ -347,7 +347,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left < right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.LowerThan(left, right);
                 }
@@ -362,7 +362,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class LowerThanOrEqualsOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left <= right;
                 }
@@ -372,7 +372,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left <= right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.LowerThanOrEquals(left, right);
                 }
@@ -387,7 +387,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class AddOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left + right;
                 }
@@ -397,7 +397,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left + right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.Add(left, right);
                 }
@@ -412,7 +412,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class SubtractOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left - right;
                 }
@@ -422,7 +422,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left - right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.Subtract(left, right);
                 }
@@ -437,7 +437,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class MultiplyOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left * right;
                 }
@@ -447,7 +447,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left * right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.Multiply(left, right);
                 }
@@ -462,7 +462,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class DivideOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left / right;
                 }
@@ -472,7 +472,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left / right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.Divide(left, right);
                 }
@@ -487,7 +487,7 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class ModuloOperation : BinaryOperation
             {
-                protected override object Execute(int left, int right)
+                protected override object Execute(long left, long right)
                 {
                     return left % right;
                 }
@@ -497,7 +497,7 @@ namespace Razensoft.Trade.Pine.Statements
                     return left % right;
                 }
 
-                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                protected override object Execute(PineSeries<long> left, PineSeries<long> right)
                 {
                     return PineSeries.Modulo(left, right);
                 }

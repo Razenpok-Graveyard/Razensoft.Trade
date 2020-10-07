@@ -2,14 +2,10 @@
 {
     public class DefaultBuiltinVariableProvider : BuiltinVariableProvider
     {
-        private readonly BuiltinFunctionProvider _functionProvider;
         private readonly IHistoricalDataProvider _historicalDataProvider;
 
-        public DefaultBuiltinVariableProvider(
-            BuiltinFunctionProvider functionProvider,
-            IHistoricalDataProvider historicalDataProvider)
+        public DefaultBuiltinVariableProvider(IHistoricalDataProvider historicalDataProvider)
         {
-            _functionProvider = functionProvider;
             _historicalDataProvider = historicalDataProvider;
         }
 
@@ -19,8 +15,8 @@
         public override string input__float => "float";
         public override string input__bool => "bool";
 
-        public override int plot__style_linebr => 0;
-        public override int plot__style_circles => 0;
+        public override long plot__style_linebr => 0;
+        public override long plot__style_circles => 0;
 
         public override string location__absolute => string.Empty;
 
@@ -40,6 +36,6 @@
         public override PineSeries<float> low => _historicalDataProvider.Low;
         public override PineSeries<float> hl2 => (high + low) / 2;
         public override PineSeries<float> ohlc4 => (open + high + low + close) / 4;
-        public override PineSeries<float> tr => _functionProvider.tr(false);
+        public override PineSeries<float> tr => FunctionProvider.tr(false);
     }
 }

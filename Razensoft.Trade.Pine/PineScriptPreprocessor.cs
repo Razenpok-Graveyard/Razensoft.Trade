@@ -6,12 +6,8 @@ namespace Razensoft.Trade.Pine
     public class PineScriptPreprocessor
     {
         private const string EmptyToken = "|EMPTY|";
-        private const string IndentToken = "|INDENT|";
-        private const string LineBeginToken = "|B|";
-        private const string LineEndToken = "|E|";
         private const string BlockBeginToken = "|BEGIN|";
         private const string BlockEndToken = "|END|";
-        private const string PossibleBlockEndToken = "|PE|";
 
         public static string Preprocess(string script)
         {

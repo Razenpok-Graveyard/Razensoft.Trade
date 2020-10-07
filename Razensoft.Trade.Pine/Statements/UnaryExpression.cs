@@ -25,7 +25,7 @@ namespace Razensoft.Trade.Pine.Statements
         public static UnaryExpression Minus(PineScriptStatement expression)
             => new UnaryExpression(expression, value =>
             {
-                if (value is int intValue) return -intValue;
+                if (value is long longValue) return -longValue;
                 if (value is float floatValue) return -floatValue;
                 throw new Exception("Unknown value type");
             });

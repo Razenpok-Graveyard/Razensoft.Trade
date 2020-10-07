@@ -8,6 +8,8 @@ namespace Razensoft.Trade.Pine
     {
         public RootPineScriptExecutionContext(BuiltinVariableProvider builtinVariableProvider, BuiltinFunctionProvider builtinFunctionProvider)
         {
+            builtinFunctionProvider.VariableProvider = builtinVariableProvider;
+            builtinVariableProvider.FunctionProvider = builtinFunctionProvider;
             DeclareFunctions(builtinFunctionProvider.GetType(), builtinFunctionProvider);
             DeclareVariables(builtinVariableProvider.GetType(), builtinVariableProvider);
         }

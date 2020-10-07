@@ -312,90 +312,90 @@ namespace Razensoft.Trade.Pine.Codegen
 
                 WriteOperator(
                     "Add", "+",
-                    ("int", "int", "int"),
-                    ("int", "float", "float"),
+                    ("long", "long", "long"),
+                    ("long", "float", "float"),
                     ("float", "float", "float"),
-                    ("float", "int", "float")
+                    ("float", "long", "float")
                 );
 
                 WriteOperator(
                     "Subtract", "-",
-                    ("int", "int", "int"),
-                    ("int", "float", "float"),
+                    ("long", "long", "long"),
+                    ("long", "float", "float"),
                     ("float", "float", "float"),
-                    ("float", "int", "float")
+                    ("float", "long", "float")
                 );
 
                 WriteOperator(
                     "Multiply", "*",
-                    ("int", "int", "int"),
-                    ("int", "float", "float"),
+                    ("long", "long", "long"),
+                    ("long", "float", "float"),
                     ("float", "float", "float"),
-                    ("float", "int", "float")
+                    ("float", "long", "float")
                 );
 
                 WriteOperator(
                     "Divide", "/",
-                    ("int", "int", "int"),
-                    ("int", "float", "float"),
+                    ("long", "long", "long"),
+                    ("long", "float", "float"),
                     ("float", "float", "float"),
-                    ("float", "int", "float")
+                    ("float", "long", "float")
                 );
 
                 WriteOperator(
                     "Modulo", "%",
-                    ("int", "int", "int"),
-                    ("int", "float", "float"),
+                    ("long", "long", "long"),
+                    ("long", "float", "float"),
                     ("float", "float", "float"),
-                    ("float", "int", "float")
+                    ("float", "long", "float")
                 );
 
                 WriteOperator(
                     "GreaterThan", ">",
-                    ("int", "int", "bool"),
-                    ("int", "float", "bool"),
+                    ("long", "long", "bool"),
+                    ("long", "float", "bool"),
                     ("float", "float", "bool"),
-                    ("float", "int", "bool")
+                    ("float", "long", "bool")
                 );
 
                 WriteOperator(
                     "GreaterThanOrEquals", ">=",
-                    ("int", "int", "bool"),
-                    ("int", "float", "bool"),
+                    ("long", "long", "bool"),
+                    ("long", "float", "bool"),
                     ("float", "float", "bool"),
-                    ("float", "int", "bool")
+                    ("float", "long", "bool")
                 );
 
                 WriteOperator(
                     "LowerThan", "<",
-                    ("int", "int", "bool"),
-                    ("int", "float", "bool"),
+                    ("long", "long", "bool"),
+                    ("long", "float", "bool"),
                     ("float", "float", "bool"),
-                    ("float", "int", "bool")
+                    ("float", "long", "bool")
                 );
 
                 WriteOperator(
                     "LowerThanOrEquals", "<=",
-                    ("int", "int", "bool"),
-                    ("int", "float", "bool"),
+                    ("long", "long", "bool"),
+                    ("long", "float", "bool"),
                     ("float", "float", "bool"),
-                    ("float", "int", "bool")
+                    ("float", "long", "bool")
                 );
 
                 WriteOperator(
                     "Equals", "==",
-                    ("int", "int", "bool"),
-                    ("int", "float", "bool"),
+                    ("long", "long", "bool"),
+                    ("long", "float", "bool"),
                     ("float", "float", "bool"),
-                    ("float", "int", "bool")
+                    ("float", "long", "bool")
                 );
 
                 WriteOperator(
                     "NotEquals", "!=",
-                    ("int", "int", "bool"),
-                    ("int", "float", "bool"),
+                    ("long", "long", "bool"),
+                    ("long", "float", "bool"),
                     ("float", "float", "bool"),
-                    ("float", "int", "bool")
+                    ("float", "long", "bool")
                 );
 
                 if (!operatorOverloads)
@@ -430,22 +430,22 @@ namespace Razensoft.Trade.Pine.Codegen
             {
                 "void" => "void",
                 "na" => "PineNA",
-                "const integer" => "int",
+                "const integer" => "long",
                 "const float" => "float",
                 "const bool" => "bool",
                 "const string" => "string",
                 "const color" => "PineColor",
-                "input integer" => "int",
+                "input integer" => "long",
                 "input float" => "float",
                 "input bool" => "bool",
                 "input string" => "string",
                 "input color" => "PineColor",
-                "integer" => "int",
+                "integer" => "long",
                 "float" => "float",
                 "bool" => "bool",
                 "string" => "string",
                 "color" => "PineColor",
-                "series[integer]" => "PineSeries<int>",
+                "series[integer]" => "PineSeries<long>",
                 "series[float]" => "PineSeries<float>",
                 "series[bool]" => "PineSeries<bool>",
                 "series[string]" => "PineSeries<string>",

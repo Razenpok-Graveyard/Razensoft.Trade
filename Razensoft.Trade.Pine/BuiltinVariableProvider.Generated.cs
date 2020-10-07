@@ -25,7 +25,7 @@ namespace Razensoft.Trade.Pine
         /// Current bar index. Numbering is zero-based, index of the first bar is
         /// 0.
         /// </summary>
-        public virtual PineSeries<int> bar_index => throw new NotImplementedException();
+        public virtual PineSeries<long> bar_index => throw new NotImplementedException();
         /// <summary>
         /// Merge strategy for requested data. Data is merged continuously without
         /// gaps, all the gaps are filled with the previous nearest existing
@@ -221,56 +221,56 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Date of current bar time in exchange timezone.
         /// </summary>
-        public virtual PineSeries<int> dayofmonth => throw new NotImplementedException();
+        public virtual PineSeries<long> dayofmonth => throw new NotImplementedException();
         /// <summary>
         /// Day of week for current bar time in exchange timezone.
         /// </summary>
-        public virtual PineSeries<int> dayofweek => throw new NotImplementedException();
+        public virtual PineSeries<long> dayofweek => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for return value of dayofweek function and value
         /// of dayofweek variable.
         /// </summary>
-        public virtual int dayofweek__friday => throw new NotImplementedException();
+        public virtual long dayofweek__friday => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for return value of dayofweek function and value
         /// of dayofweek variable.
         /// </summary>
-        public virtual int dayofweek__monday => throw new NotImplementedException();
+        public virtual long dayofweek__monday => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for return value of dayofweek function and value
         /// of dayofweek variable.
         /// </summary>
-        public virtual int dayofweek__saturday => throw new NotImplementedException();
+        public virtual long dayofweek__saturday => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for return value of dayofweek function and value
         /// of dayofweek variable.
         /// </summary>
-        public virtual int dayofweek__sunday => throw new NotImplementedException();
+        public virtual long dayofweek__sunday => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for return value of dayofweek function and value
         /// of dayofweek variable.
         /// </summary>
-        public virtual int dayofweek__thursday => throw new NotImplementedException();
+        public virtual long dayofweek__thursday => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for return value of dayofweek function and value
         /// of dayofweek variable.
         /// </summary>
-        public virtual int dayofweek__tuesday => throw new NotImplementedException();
+        public virtual long dayofweek__tuesday => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for return value of dayofweek function and value
         /// of dayofweek variable.
         /// </summary>
-        public virtual int dayofweek__wednesday => throw new NotImplementedException();
+        public virtual long dayofweek__wednesday => throw new NotImplementedException();
         /// <summary>
         /// A named constant that specifies where the plot is displayed. Display
         /// everywhere.
         /// </summary>
-        public virtual int display__all => throw new NotImplementedException();
+        public virtual long display__all => throw new NotImplementedException();
         /// <summary>
         /// A named constant that specifies where the plot is displayed. Display
         /// nowhere. Available in alert template message
         /// </summary>
-        public virtual int display__none => throw new NotImplementedException();
+        public virtual long display__none => throw new NotImplementedException();
         /// <summary>
         /// A named constant for line.new and line.set_extend functions
         /// </summary>
@@ -318,19 +318,19 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Is a named constant for dashed linestyle of hline function.
         /// </summary>
-        public virtual int hline__style_dashed => throw new NotImplementedException();
+        public virtual long hline__style_dashed => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for dotted linestyle of hline function.
         /// </summary>
-        public virtual int hline__style_dotted => throw new NotImplementedException();
+        public virtual long hline__style_dotted => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for solid linestyle of hline function.
         /// </summary>
-        public virtual int hline__style_solid => throw new NotImplementedException();
+        public virtual long hline__style_solid => throw new NotImplementedException();
         /// <summary>
         /// Current bar hour in exchange timezone.
         /// </summary>
-        public virtual PineSeries<int> hour => throw new NotImplementedException();
+        public virtual PineSeries<long> hour => throw new NotImplementedException();
         /// <summary>
         /// Intraday Intensity Index
         /// </summary>
@@ -510,11 +510,11 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Current bar minute in exchange timezone.
         /// </summary>
-        public virtual PineSeries<int> minute => throw new NotImplementedException();
+        public virtual PineSeries<long> minute => throw new NotImplementedException();
         /// <summary>
         /// Current bar month in exchange timezone.
         /// </summary>
-        public virtual PineSeries<int> month => throw new NotImplementedException();
+        public virtual PineSeries<long> month => throw new NotImplementedException();
         /// <summary>
         /// Double.NaN value (Not a Number).
         /// </summary>
@@ -548,41 +548,41 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Is a named constant for area style of plot function.
         /// </summary>
-        public virtual int plot__style_area => throw new NotImplementedException();
+        public virtual long plot__style_area => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for area style of plot function. Same as area but
         /// doesn't fill the breaks (gaps) in data.
         /// </summary>
-        public virtual int plot__style_areabr => throw new NotImplementedException();
+        public virtual long plot__style_areabr => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for circles style of plot function.
         /// </summary>
-        public virtual int plot__style_circles => throw new NotImplementedException();
+        public virtual long plot__style_circles => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for columns style of plot function.
         /// </summary>
-        public virtual int plot__style_columns => throw new NotImplementedException();
+        public virtual long plot__style_columns => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for cross style of plot function.
         /// </summary>
-        public virtual int plot__style_cross => throw new NotImplementedException();
+        public virtual long plot__style_cross => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for histogram style of plot function.
         /// </summary>
-        public virtual int plot__style_histogram => throw new NotImplementedException();
+        public virtual long plot__style_histogram => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for line style of plot function.
         /// </summary>
-        public virtual int plot__style_line => throw new NotImplementedException();
+        public virtual long plot__style_line => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for line style of plot function. Same as line but
         /// doesn't fill the breaks (gaps) in data.
         /// </summary>
-        public virtual int plot__style_linebr => throw new NotImplementedException();
+        public virtual long plot__style_linebr => throw new NotImplementedException();
         /// <summary>
         /// Is a named constant for stepline style of plot function.
         /// </summary>
-        public virtual int plot__style_stepline => throw new NotImplementedException();
+        public virtual long plot__style_stepline => throw new NotImplementedException();
         /// <summary>
         /// Positive Volume Index
         /// </summary>
@@ -595,21 +595,21 @@ namespace Razensoft.Trade.Pine
         /// Scale value for study function. Study is added to the left price
         /// scale.
         /// </summary>
-        public virtual int scale__left => throw new NotImplementedException();
+        public virtual long scale__left => throw new NotImplementedException();
         /// <summary>
         /// Scale value for study function. Study is added in 'No Scale' mode. Can
         /// be used only with 'overlay=true'.
         /// </summary>
-        public virtual int scale__none => throw new NotImplementedException();
+        public virtual long scale__none => throw new NotImplementedException();
         /// <summary>
         /// Scale value for study function. Study is added to the right price
         /// scale.
         /// </summary>
-        public virtual int scale__right => throw new NotImplementedException();
+        public virtual long scale__right => throw new NotImplementedException();
         /// <summary>
         /// Current bar second in exchange timezone.
         /// </summary>
-        public virtual PineSeries<int> second => throw new NotImplementedException();
+        public virtual PineSeries<long> second => throw new NotImplementedException();
         /// <summary>
         /// Constant for extended session type (with extended hours data).
         /// </summary>
@@ -707,7 +707,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Number of trades, which were closed for the whole trading interval.
         /// </summary>
-        public virtual PineSeries<int> strategy__closedtrades => throw new NotImplementedException();
+        public virtual PineSeries<long> strategy__closedtrades => throw new NotImplementedException();
         /// <summary>
         /// Commission type for an order. Money displayed in the account currency
         /// per contract.
@@ -743,7 +743,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Number of breakeven trades for the whole trading interval.
         /// </summary>
-        public virtual PineSeries<int> strategy__eventrades => throw new NotImplementedException();
+        public virtual PineSeries<long> strategy__eventrades => throw new NotImplementedException();
         /// <summary>
         /// If the number of contracts/shares/lots/units to buy/sell is not
         /// specified for strategy.entry or strategy.order commands (or 'NaN' is
@@ -770,7 +770,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Number of unprofitable trades for the whole trading interval.
         /// </summary>
-        public virtual PineSeries<int> strategy__losstrades => throw new NotImplementedException();
+        public virtual PineSeries<long> strategy__losstrades => throw new NotImplementedException();
         /// <summary>
         /// Maximum number of contracts/shares/lots/units in one trade for the
         /// whole trading interval.
@@ -824,7 +824,7 @@ namespace Razensoft.Trade.Pine
         /// Number of market position entries, which were not closed and remain
         /// opened. If there is no open market position, 0 is returned.
         /// </summary>
-        public virtual PineSeries<int> strategy__opentrades => throw new NotImplementedException();
+        public virtual PineSeries<long> strategy__opentrades => throw new NotImplementedException();
         /// <summary>
         /// If the number of contracts/shares/lots/units to buy/sell is not
         /// specified for strategy.entry or strategy.order commands (or 'NaN' is
@@ -857,7 +857,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Number of profitable trades for the whole trading interval.
         /// </summary>
-        public virtual PineSeries<int> strategy__wintrades => throw new NotImplementedException();
+        public virtual PineSeries<long> strategy__wintrades => throw new NotImplementedException();
         /// <summary>
         /// Base currency for the symbol. For the symbol 'BTCUSD' returns 'BTC'.
         /// </summary>
@@ -928,13 +928,13 @@ namespace Razensoft.Trade.Pine
         /// Current bar time in UNIX format. It is the number of milliseconds that
         /// have elapsed since 00:00:00 UTC, 1 January 1970.
         /// </summary>
-        public virtual PineSeries<int> time => throw new NotImplementedException();
+        public virtual PineSeries<long> time => throw new NotImplementedException();
         /// <summary>
         /// Current bar close time in UNIX format. It is the number of
         /// milliseconds that have elapsed since 00:00:00 UTC, 1 January 1970. On
         /// price-based charts this variable value is na.
         /// </summary>
-        public virtual PineSeries<int> time_close => throw new NotImplementedException();
+        public virtual PineSeries<long> time_close => throw new NotImplementedException();
         /// <summary>
         /// Returns true if current resolution is a daily resolution, false
         /// otherwise.
@@ -974,7 +974,7 @@ namespace Razensoft.Trade.Pine
         /// Multiplier of resolution, e.g. '60' - 60, 'D' - 1, '5D' - 5, '12M' -
         /// 12
         /// </summary>
-        public virtual int timeframe__multiplier => throw new NotImplementedException();
+        public virtual long timeframe__multiplier => throw new NotImplementedException();
         /// <summary>
         /// Resolution, e.g. '60' - 60 minutes, 'D' - daily, 'W' - weekly, 'M' -
         /// monthly, '5D' - 5 days, '12M' - one year, '3M' - one quarter
@@ -984,7 +984,7 @@ namespace Razensoft.Trade.Pine
         /// Current time in UNIX format. It is the number of milliseconds that
         /// have elapsed since 00:00:00 UTC, 1 January 1970.
         /// </summary>
-        public virtual PineSeries<int> timenow => throw new NotImplementedException();
+        public virtual PineSeries<long> timenow => throw new NotImplementedException();
         /// <summary>
         /// True range. Same as tr(false). It is max(high - low, abs(high -
         /// close[1]), abs(low - close[1]))
@@ -1005,7 +1005,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Week number of current bar time in exchange timezone.
         /// </summary>
-        public virtual PineSeries<int> weekofyear => throw new NotImplementedException();
+        public virtual PineSeries<long> weekofyear => throw new NotImplementedException();
         /// <summary>
         /// Williams Variable Accumulation/Distribution
         /// </summary>
@@ -1025,7 +1025,7 @@ namespace Razensoft.Trade.Pine
         /// <summary>
         /// Current bar year in exchange timezone.
         /// </summary>
-        public virtual PineSeries<int> year => throw new NotImplementedException();
+        public virtual PineSeries<long> year => throw new NotImplementedException();
         /// <summary>
         /// A named constant that specifies the algorithm of interpretation of
         /// y-value in function label.new

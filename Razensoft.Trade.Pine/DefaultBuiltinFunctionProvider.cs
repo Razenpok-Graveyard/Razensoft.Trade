@@ -14,7 +14,7 @@ namespace Razensoft.Trade.Pine
             return Math.Max(x1, x2);
         }
 
-        public override int max(int x1, int x2)
+        public override long max(long x1, long x2)
         {
             return Math.Max(x1, x2);
         }

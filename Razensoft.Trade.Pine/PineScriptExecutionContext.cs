@@ -89,6 +89,11 @@ namespace Razensoft.Trade.Pine
             throw new Exception($"Function {function.Name} is already declared.");
         }
 
+        public object CallFunction(string name, params object[] args)
+        {
+            return CallFunction(name, args, new Dictionary<string, object>());
+        }
+
         public object CallFunction(string name, object[] positionalArgs, Dictionary<string, object> namedArgs)
         {
             if (_functions.TryGetValue(name, out var list))

@@ -9,29 +9,29 @@ namespace Razensoft.Trade.Pine
 
         static PineTypeSystem()
         {
-            AddTypeCast<PineNA, int>(value => 0);
+            AddTypeCast<PineNA, long>(value => 0);
             AddTypeCast<PineNA, float>(value => 0);
             AddTypeCast<PineNA, bool>(value => false);
             AddTypeCast<PineNA, string>(value => string.Empty);
             AddTypeCast<PineNA, PineColor>(value => new PineColor());
             AddTypeCast<PineNA, PineSeries<PineNA>>(value => new PineSeries<PineNA>());
-            AddTypeCast<PineNA, PineSeries<int>>(value => new PineSeries<int>());
+            AddTypeCast<PineNA, PineSeries<long>>(value => new PineSeries<long>());
             AddTypeCast<PineNA, PineSeries<float>>(value => new PineSeries<float>());
             AddTypeCast<PineNA, PineSeries<bool>>(value => new PineSeries<bool>());
             AddTypeCast<PineNA, PineSeries<string>>(value => new PineSeries<string>());
             AddTypeCast<PineNA, PineSeries<PineColor>>(value => new PineSeries<PineColor>());
 
-            AddTypeCast<PineSeries<PineNA>, PineSeries<int>>(value => new PineSeries<int>());
+            AddTypeCast<PineSeries<PineNA>, PineSeries<long>>(value => new PineSeries<long>());
             AddTypeCast<PineSeries<PineNA>, PineSeries<float>>(value => new PineSeries<float>());
             AddTypeCast<PineSeries<PineNA>, PineSeries<bool>>(value => new PineSeries<bool>());
             AddTypeCast<PineSeries<PineNA>, PineSeries<string>>(value => new PineSeries<string>());
             AddTypeCast<PineSeries<PineNA>, PineSeries<PineColor>>(value => new PineSeries<PineColor>());
 
-            AddTypeCast<int, float>(value => (float) value);
-            AddTypeCast<int, bool>(value => value > 0);
-            AddTypeCast<int, PineSeries<int>>(value => new PineSeries<int>());
-            AddTypeCast<int, PineSeries<float>>(value => new PineSeries<float>());
-            AddTypeCast<int, PineSeries<bool>>(value => new PineSeries<bool>());
+            AddTypeCast<long, float>(value => (float) value);
+            AddTypeCast<long, bool>(value => value > 0);
+            AddTypeCast<long, PineSeries<long>>(value => new PineSeries<long>());
+            AddTypeCast<long, PineSeries<float>>(value => new PineSeries<float>());
+            AddTypeCast<long, PineSeries<bool>>(value => new PineSeries<bool>());
 
             AddTypeCast<float, bool>(value => value > 0);
             AddTypeCast<float, PineSeries<float>>(value => new PineSeries<float>());
@@ -43,7 +43,7 @@ namespace Razensoft.Trade.Pine
 
             AddTypeCast<string, PineSeries<PineColor>>(value => new PineSeries<PineColor>());
 
-            AddTypeCast<PineSeries<int>, int>(value => (int) value[0]);
+            AddTypeCast<PineSeries<long>, long>(value => (long) value[0]);
             AddTypeCast<PineSeries<float>, float>(value => (float) value[0]);
             AddTypeCast<PineSeries<bool>, bool>(value => (bool) value[0]);
             AddTypeCast<PineSeries<string>, string>(value => (string) value[0]);

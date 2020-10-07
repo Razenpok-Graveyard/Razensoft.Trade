@@ -111,7 +111,7 @@ namespace Razensoft.Trade.Pine
                    ParseLiteral(context.COLOR_LITERAL(), literal => literal) ??
                    ParseLiteral(context.INT_LITERAL(), literal =>
                    {
-                       var value = int.Parse(literal);
+                       var value = long.Parse(literal);
                        return context.MINUS() != null ? -value : value;
                    }) ??
                    ParseLiteral(context.FLOAT_LITERAL(), literal =>
