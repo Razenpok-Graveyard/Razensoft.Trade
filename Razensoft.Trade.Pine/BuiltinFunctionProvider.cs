@@ -24,5 +24,15 @@ namespace Razensoft.Trade.Pine
         {
             throw new NotImplementedException();
         }
+
+        public virtual int max(int x1, int x2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual float max(float x1, float x2)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

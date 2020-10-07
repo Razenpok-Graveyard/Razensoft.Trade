@@ -26,6 +26,7 @@ namespace Razensoft.Trade.Pine.Codegen
                 .ToList()[2];
             var functions = ProcessFunctions(functionsNode.NextSibling);
             WriteFunctions(functions);
+            WritePineSeriesOperators();
         }
 
         private static IEnumerable<VariableDefinition> ProcessVariables(HtmlNode node)
@@ -63,12 +64,13 @@ namespace Razensoft.Trade.Pine.Codegen
             var name = node.Descendants("h3").First().InnerText;
             var skip = new[]
             {
-                "input", "nz"
+                "input", "nz", "max"
             };
             if (skip.Contains(name))
             {
                 yield break;
             }
+
             var divs = node.Descendants("div");
             var description = divs.First().InnerText;
 
@@ -81,6 +83,7 @@ namespace Razensoft.Trade.Pine.Codegen
                     .Select(n => n.InnerText);
                 return string.Join(Environment.NewLine, nodes);
             }
+
             var returns = GetSectionText("Returns");
 
             var syntaxNodes = divs.Where(n => n.HasClass("tv-pine-reference-item__syntax"));
@@ -92,6 +95,7 @@ namespace Razensoft.Trade.Pine.Codegen
                 {
                     parts = text.Split(" -&gt; ");
                 }
+
                 var parameters = parts[0]
                     .TrimStart(name)
                     .TrimStart("(")
@@ -99,7 +103,7 @@ namespace Razensoft.Trade.Pine.Codegen
                     .Split(", ")
                     .Where(p => p != "...")
                     .ToList();
-                
+
                 var type = parts[1];
                 yield return new FunctionDefinition(name, type, description, returns, parameters);
             }
@@ -134,7 +138,8 @@ namespace Razensoft.Trade.Pine.Codegen
             sb.AppendLine("}");
 
             var solutionDirectory = GetSolutionDirectory();
-            var targetPath = Path.Combine(solutionDirectory, "Razensoft.Trade.Pine", "BuiltinVariableProvider.Generated.cs");
+            var targetPath = Path.Combine(solutionDirectory, "Razensoft.Trade.Pine",
+                "BuiltinVariableProvider.Generated.cs");
             File.WriteAllText(targetPath, sb.ToString());
         }
 
@@ -159,6 +164,7 @@ namespace Razensoft.Trade.Pine.Codegen
                 {
                     name = $"@{name}";
                 }
+
                 var type = GetTypeName(function.Type);
                 sb.AppendLine(indent + "/// <summary>");
                 foreach (var descriptionChunk in WordWrap(function.Description, 70))
@@ -175,6 +181,7 @@ namespace Razensoft.Trade.Pine.Codegen
                     {
                         parameterName = $"@{parameterName}";
                     }
+
                     return $"object {parameterName}";
                 }));
                 if (function.Parameters.Count <= 3)
@@ -192,6 +199,7 @@ namespace Razensoft.Trade.Pine.Codegen
                         {
                             parameterName = $"@{parameterName}";
                         }
+
                         parameterLine += $"object {parameterName},";
                         if (parameterLine.Length >= 60)
                         {
@@ -203,9 +211,11 @@ namespace Razensoft.Trade.Pine.Codegen
                             parameterLine += " ";
                         }
                     }
+
                     parameterLine += $"object {function.Parameters.Last()})";
                     sb.AppendLine(indent + "    " + parameterLine);
                 }
+
                 sb.AppendLine(indent + "{");
                 sb.AppendLine(indent + "    throw new NotImplementedException();");
                 sb.AppendLine(indent + "}");
@@ -215,7 +225,175 @@ namespace Razensoft.Trade.Pine.Codegen
             sb.AppendLine("}");
 
             var solutionDirectory = GetSolutionDirectory();
-            var targetPath = Path.Combine(solutionDirectory, "Razensoft.Trade.Pine", "BuiltinFunctionProvider.Generated.cs");
+            var targetPath = Path.Combine(solutionDirectory, "Razensoft.Trade.Pine",
+                "BuiltinFunctionProvider.Generated.cs");
+            File.WriteAllText(targetPath, sb.ToString());
+        }
+
+        public static void WritePineSeriesOperators()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("using System;");
+            sb.AppendLine();
+            sb.AppendLine("namespace Razensoft.Trade.Pine");
+            sb.AppendLine("{");
+            sb.AppendLine("    public partial class PineSeries<T>");
+            sb.AppendLine("    {");
+
+            void WriteCombinatorOperator(
+                string name, string @operator, bool overloadOperator,
+                params (string left, string right, string @return)[] overloads)
+            {
+                foreach (var (left, right, @return) in overloads)
+                {
+                    sb.AppendLine(
+                        $"        public static PineSeries<{@return}> {name}(PineSeries<{left}> left, PineSeries<{right}> right)");
+                    sb.AppendLine("        {");
+                    sb.AppendLine(
+                        $"            return new CombinationSeries<{left}, {right}, {@return}>(left, right, (l, r) => l {@operator} r);");
+                    sb.AppendLine("        }");
+                    sb.AppendLine();
+                    if (overloadOperator)
+                    {
+                        sb.AppendLine(
+                            $"        public static PineSeries<{@return}> operator {@operator}(PineSeries<{left}> left, PineSeries<{right}> right)");
+                        sb.AppendLine("        {");
+                        sb.AppendLine(
+                            $"            return new CombinationSeries<{left}, {right}, {@return}>(left, right, (l, r) => l {@operator} r);");
+                        sb.AppendLine("        }");
+                        sb.AppendLine();
+                    }
+                }
+            }
+
+            void WriteTransformationOperator(
+                string name, string @operator, bool overloadOperator, params (string left, string right, string @return)[] overloads)
+            {
+                foreach (var (left, right, @return) in overloads)
+                {
+                    sb.AppendLine(
+                        $"        public static PineSeries<{@return}> {name}(PineSeries<{left}> left, {right} right)");
+                    sb.AppendLine("        {");
+                    sb.AppendLine(
+                        $"            return new TransformationSeries<{left}, {@return}>(left, v => v {@operator} right);");
+                    sb.AppendLine("        }");
+                    sb.AppendLine();
+                    if (overloadOperator)
+                    {
+                        sb.AppendLine(
+                            $"        public static PineSeries<{@return}> operator {@operator}(PineSeries<{left}> left, {right} right)");
+                        sb.AppendLine("        {");
+                        sb.AppendLine(
+                            $"            return new TransformationSeries<{left}, {@return}>(left, v => v {@operator} right);");
+                        sb.AppendLine("        }");
+                        sb.AppendLine();
+                    }
+                }
+            }
+
+            void WriteOperator(
+                string name, string @operator, bool overloadOperator,
+                params (string left, string right, string @return)[] overloads)
+            {
+                WriteCombinatorOperator(name, @operator, overloadOperator, overloads);
+                WriteTransformationOperator(name, @operator, overloadOperator, overloads);
+            }
+
+            WriteOperator(
+                "Add", "+", true,
+                ("int", "int", "int"),
+                ("int", "float", "float"),
+                ("float", "float", "float"),
+                ("float", "int", "float")
+            );
+
+            WriteOperator(
+                "Subtract", "-", true,
+                ("int", "int", "int"),
+                ("int", "float", "float"),
+                ("float", "float", "float"),
+                ("float", "int", "float")
+            );
+
+            WriteOperator(
+                "Multiply", "*", true,
+                ("int", "int", "int"),
+                ("int", "float", "float"),
+                ("float", "float", "float"),
+                ("float", "int", "float")
+            );
+
+            WriteOperator(
+                "Divide", "/", true,
+                ("int", "int", "float"),
+                ("int", "float", "float"),
+                ("float", "float", "float"),
+                ("float", "int", "float")
+            );
+
+            WriteOperator(
+                "GreaterThan", ">", true,
+                ("int", "int", "bool"),
+                ("int", "float", "bool"),
+                ("float", "float", "bool"),
+                ("float", "int", "bool")
+            );
+
+            WriteOperator(
+                "GreaterThanOrEquals", ">=", true,
+                ("int", "int", "bool"),
+                ("int", "float", "bool"),
+                ("float", "float", "bool"),
+                ("float", "int", "bool")
+            );
+            
+            WriteOperator(
+                "LowerThan", "<", true,
+                ("int", "int", "bool"),
+                ("int", "float", "bool"),
+                ("float", "float", "bool"),
+                ("float", "int", "bool")
+            );
+
+            WriteOperator(
+                "LowerThanOrEquals", "<=", true,
+                ("int", "int", "bool"),
+                ("int", "float", "bool"),
+                ("float", "float", "bool"),
+                ("float", "int", "bool")
+            );
+
+            WriteOperator(
+                "Equals", "==", true,
+                ("int", "int", "bool"),
+                ("int", "float", "bool"),
+                ("float", "float", "bool"),
+                ("float", "int", "bool")
+            );
+
+            WriteOperator(
+                "NotEquals", "!=", true,
+                ("int", "int", "bool"),
+                ("int", "float", "bool"),
+                ("float", "float", "bool"),
+                ("float", "int", "bool")
+            );
+
+            WriteOperator(
+                "And", "&&", false,
+                ("bool", "bool", "bool")
+            );
+
+            WriteOperator(
+                "Or", "||", false,
+                ("bool", "bool", "bool")
+            );
+            
+            sb.AppendLine("    }");
+            sb.AppendLine("}");
+
+            var solutionDirectory = GetSolutionDirectory();
+            var targetPath = Path.Combine(solutionDirectory, "Razensoft.Trade.Pine", "PineSeries.Generated.cs");
             File.WriteAllText(targetPath, sb.ToString());
         }
 
@@ -302,7 +480,7 @@ namespace Razensoft.Trade.Pine.Codegen
 
             return lines;
         }
-        
+
         public static IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> items, Func<T, TKey> property)
         {
             return items.GroupBy(property).Select(x => x.First());
@@ -365,6 +543,7 @@ namespace Razensoft.Trade.Pine.Codegen
 
         public List<string> Parameters { get; }
     }
+
     internal static class StringExtensions
     {
         public static string TrimStart(this string target, string trimString)

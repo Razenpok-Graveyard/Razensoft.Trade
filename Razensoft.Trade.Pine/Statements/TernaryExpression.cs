@@ -22,11 +22,11 @@
             bool condition;
             if (conditionObject is PineSeries<bool> series)
             {
-                condition = (bool) series[0];
+                condition = (bool) PineTypeSystem.Convert(series[0], typeof(bool));
             }
             else
             {
-                condition = (bool) conditionObject;
+                condition = (bool) PineTypeSystem.Convert(conditionObject, typeof(bool));
             }
             var executingExpression = condition ? _truthyExpression : _falsyExpression;
             return executingExpression.Execute(context);

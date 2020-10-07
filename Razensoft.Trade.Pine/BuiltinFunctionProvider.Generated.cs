@@ -1068,13 +1068,6 @@ namespace Razensoft.Trade.Pine
             throw new NotImplementedException();
         }
         /// <summary>
-        /// Returns the greatest of multiple values
-        /// </summary>
-        public virtual int max(object x1, object x2, object x10)
-        {
-            throw new NotImplementedException();
-        }
-        /// <summary>
         /// Function sets the maximum number of bars that is available for
         /// historical reference of a given built-in or user variable. When
         /// operator '[]' is applied to a variable - it is a reference to a

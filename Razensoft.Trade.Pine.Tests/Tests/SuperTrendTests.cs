@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using System.IO;
+using FluentAssertions;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace Razensoft.Trade.Pine.Parsing.Tests.Tests
@@ -10,17 +13,22 @@ namespace Razensoft.Trade.Pine.Parsing.Tests.Tests
         [SetUp]
         public void Setup()
         {
-            _script = PineScript.FromFile("files/SuperTrend STRATEGY.pine");
+            _script = PineScript.FromFile("files/SuperTrend STRATEGY/script.pine");
         }
         
         [Test]
         public void Should_not_call_entry_when_not_appropriate()
         {
-            var functionProvider = new StubBuiltinFunctionProvider();
-            var variableProvider = new StubBuiltinVariableProvider(functionProvider);
-            var executionContext = new RootPineScriptExecutionContext(variableProvider, functionProvider);
-            _script.Execute(executionContext);
-            functionProvider.EntryId.Should().Be(null);
+            var data = HistoricalData.FromFile("files/SuperTrend STRATEGY/SELL Entry.json");
+            for (var i = 0; i < data.Length; i++)
+            {
+                data.Position = i;
+                var functionProvider = new StubBuiltinFunctionProvider();
+                var variableProvider = new DefaultBuiltinVariableProvider(functionProvider, data);
+                var executionContext = new RootPineScriptExecutionContext(variableProvider, functionProvider);
+                _script.Execute(executionContext);
+                functionProvider.EntryId.Should().Be(null);
+            }
         }
 
         private class StubBuiltinFunctionProvider : DefaultBuiltinFunctionProvider
@@ -97,30 +105,63 @@ namespace Razensoft.Trade.Pine.Parsing.Tests.Tests
             }
         }
 
-        private class StubBuiltinVariableProvider : DefaultBuiltinVariableProvider
+        private class HistoricalData : IHistoricalDataProvider
         {
-            public StubBuiltinVariableProvider(BuiltinFunctionProvider functionProvider)
-                : base(functionProvider, null) { }
+            private readonly List<float> _open;
+            private readonly List<float> _close;
+            private readonly List<float> _low;
+            private readonly List<float> _high;
+            private int _position;
+
+            public HistoricalData(List<float> open, List<float> close, List<float> low, List<float> high)
+            {
+                _open = open;
+                _close = close;
+                _low = low;
+                _high = high;
+                Length = open.Count;
+                Position = 0;
+            }
             
-            public override PineSeries<float> open => new PineSeries<float>(new float[]
-            {
-                1000
-            });
+            public int Length { get; }
 
-            public override PineSeries<float> close => new PineSeries<float>(new float[]
-            {
-                1200
-            });
+            public PineSeries<float> Open { get; private set; }
+            public PineSeries<float> Close { get; private set; }
+            public PineSeries<float> Low { get; private set; }
+            public PineSeries<float> High { get; private set; }
 
-            public override PineSeries<float> high => new PineSeries<float>(new float[]
+            public int Position
             {
-                1500
-            });
+                get => _position;
+                set
+                {
+                    _position = value;
+                    Open = new PineSeries<float>(_open, Position);
+                    Close = new PineSeries<float>(_close, Position);
+                    Low = new PineSeries<float>(_low, Position);
+                    High = new PineSeries<float>(_high, Position);
+                }
+            }
 
-            public override PineSeries<float> low => new PineSeries<float>(new float[]
+            public static HistoricalData FromFile(string path)
             {
-                800
-            });
+                var json = File.ReadAllText(path);
+                var jArray = JArray.Parse(json);
+                var open = new List<float>();
+                var close = new List<float>();
+                var high = new List<float>();
+                var low = new List<float>();
+                foreach (var jToken in jArray)
+                {
+                    var candleArray = (JArray) jToken;
+                    open.Add(float.Parse(candleArray[1].ToString()));
+                    high.Add(float.Parse(candleArray[2].ToString()));
+                    low.Add(float.Parse(candleArray[3].ToString()));
+                    close.Add(float.Parse(candleArray[4].ToString()));
+                }
+
+                return new HistoricalData(open, close, high, low);
+            }
         }
     }
 }

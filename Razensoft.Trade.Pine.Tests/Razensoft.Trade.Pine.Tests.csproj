@@ -18,7 +18,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="files\SuperTrend STRATEGY.pine">
+      <None Update="files\SuperTrend STRATEGY\script.pine">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="files\SuperTrend STRATEGY\SELL Entry.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
