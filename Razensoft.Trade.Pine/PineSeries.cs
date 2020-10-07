@@ -47,19 +47,47 @@ namespace Razensoft.Trade.Pine
             {
                 return new CombinationSeries(left, right, (arg1, arg2) => (int) arg1 + (int) arg2);
             }
-
+            if (typeof(T) == typeof(float))
+            {
+                return new CombinationSeries(left, right, (arg1, arg2) => (float) arg1 + (float) arg2);
+            }
+            throw new NotSupportedException($"Series of type {typeof(T)} cannot be combined");
         }
 
         public static PineSeries<T> operator /(PineSeries<T> left, int right)
-            => new PineSeries<T>();
-
-        private class CombinationSeries : PineSeries
         {
-            private readonly PineSeries _left;
-            private readonly PineSeries _right;
+            if (typeof(T) == typeof(int))
+            {
+                return new TransformationSeries(left, value => (int) value + right);
+            }
+            if (typeof(T) == typeof(float))
+            {
+                return new TransformationSeries(left, value => (float) value + right);
+            }
+            throw new NotSupportedException($"Series of type {typeof(T)} cannot be combined");
+        }
+        
+        private class TransformationSeries : PineSeries<T>
+        {
+            private readonly PineSeries<T> _series;
+            private readonly Func<object, object> _transformer;
+
+            public TransformationSeries(PineSeries<T> series, Func<object, object> transformer)
+            {
+                _series = series;
+                _transformer = transformer;
+            }
+
+            public override object this[int index] => _transformer(_series[index]);
+        }
+
+        private class CombinationSeries : PineSeries<T>
+        {
+            private readonly PineSeries<T> _left;
+            private readonly PineSeries<T> _right;
             private readonly Func<object, object, object> _combinator;
 
-            public CombinationSeries(PineSeries left, PineSeries right, Func<object, object, object> combinator)
+            public CombinationSeries(PineSeries<T> left, PineSeries<T> right, Func<object, object, object> combinator)
             {
                 _left = left;
                 _right = right;

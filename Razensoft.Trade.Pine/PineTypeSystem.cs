@@ -63,6 +63,10 @@ namespace Razensoft.Trade.Pine
 
         public static object Convert(object value, Type to)
         {
+            if (to.IsInstanceOfType(value))
+            {
+                return value;
+            }
             if (!TypeCasts.TryGetValue(value.GetType(), out var typeCast))
             {
                 throw new InvalidCastException($"Type {value.GetType()} can not be cast to {to}");
@@ -73,7 +77,7 @@ namespace Razensoft.Trade.Pine
 
         public static bool IsConvertible(Type from, Type to)
         {
-            return TypeCasts.TryGetValue(from, out var typeCast) && typeCast.IsConvertible(to);
+            return to.IsAssignableFrom(from) || TypeCasts.TryGetValue(from, out var typeCast) && typeCast.IsConvertible(to);
         }
 
         private class TypeCast

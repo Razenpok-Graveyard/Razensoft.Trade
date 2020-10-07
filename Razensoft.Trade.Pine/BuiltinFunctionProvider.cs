@@ -16,5 +16,13 @@ namespace Razensoft.Trade.Pine
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Replaces NaN values with zeros (or given value) in a series.
+        /// </summary>
+        public virtual object nz(object x, object y)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

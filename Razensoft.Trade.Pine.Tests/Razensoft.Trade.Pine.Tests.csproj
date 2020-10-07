@@ -7,19 +7,20 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="5.10.3" />
         <PackageReference Include="nunit" Version="3.12.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="example.pine">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+      <ProjectReference Include="..\Razensoft.Trade.Pine\Razensoft.Trade.Pine.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Razensoft.Trade.Pine\Razensoft.Trade.Pine.csproj" />
+      <None Update="files\SuperTrend STRATEGY.pine">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

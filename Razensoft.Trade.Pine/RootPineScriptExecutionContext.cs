@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Razensoft.Trade.Pine
 {
@@ -6,18 +8,29 @@ namespace Razensoft.Trade.Pine
     {
         public RootPineScriptExecutionContext(BuiltinVariableProvider builtinVariableProvider, BuiltinFunctionProvider builtinFunctionProvider)
         {
-            var functions = builtinFunctionProvider.GetType()
-                .GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+            DeclareFunctions(builtinFunctionProvider.GetType(), builtinFunctionProvider);
+            DeclareVariables(builtinVariableProvider.GetType(), builtinVariableProvider);
+        }
+
+        private void DeclareFunctions(Type providerType, object provider)
+        {
+            var functions = providerType
+                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                .Where(v => v.DeclaringType != typeof(object) && v.DeclaringType != typeof(BuiltinFunctionProvider));
             foreach (var function in functions)
             {
-                DeclareFunction(new BuiltinFunction(function, builtinFunctionProvider));
+                DeclareFunction(new BuiltinFunction(function, provider));
             }
+        }
 
-            var variables = builtinVariableProvider.GetType()
-                .GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
+        private void DeclareVariables(Type providerType, object provider)
+        {
+            var variables = providerType
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(v => v.DeclaringType != typeof(object) && v.DeclaringType != typeof(BuiltinVariableProvider));
             foreach (var variable in variables)
             {
-                DeclareVariable(variable.Name.Replace("__", "."), variable.GetValue(builtinVariableProvider));
+                DeclareVariable(variable.Name.Replace("__", "."), variable.GetValue(provider));
             }
         }
     }

@@ -1144,20 +1144,6 @@ namespace Razensoft.Trade.Pine
             throw new NotImplementedException();
         }
         /// <summary>
-        /// Replaces NaN values with zeros (or given value) in a series.
-        /// </summary>
-        public virtual int nz(object x, object y)
-        {
-            throw new NotImplementedException();
-        }
-        /// <summary>
-        /// Replaces NaN values with zeros (or given value) in a series.
-        /// </summary>
-        public virtual int nz(object x)
-        {
-            throw new NotImplementedException();
-        }
-        /// <summary>
         /// Shifts series x on the y bars to the right.
         /// </summary>
         public virtual PineSeries<bool> offset(object source, object offset)

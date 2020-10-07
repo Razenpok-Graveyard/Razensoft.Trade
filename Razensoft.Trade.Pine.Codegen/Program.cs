@@ -61,7 +61,11 @@ namespace Razensoft.Trade.Pine.Codegen
         private static IEnumerable<FunctionDefinition> ProcessFunction(HtmlNode node)
         {
             var name = node.Descendants("h3").First().InnerText;
-            if (name == "input")
+            var skip = new[]
+            {
+                "input", "nz"
+            };
+            if (skip.Contains(name))
             {
                 yield break;
             }

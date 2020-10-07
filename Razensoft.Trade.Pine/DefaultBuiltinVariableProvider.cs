@@ -15,9 +15,9 @@
 
         public override PineNA na => PineNA.NA;
 
-        public override string input__integer => string.Empty;
-        public override string input__float => string.Empty;
-        public override string input__bool => string.Empty;
+        public override string input__integer => "integer";
+        public override string input__float => "float";
+        public override string input__bool => "bool";
 
         public override int plot__style_linebr => 0;
         public override int plot__style_circles => 0;
