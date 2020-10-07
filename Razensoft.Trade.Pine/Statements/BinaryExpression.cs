@@ -184,7 +184,7 @@ namespace Razensoft.Trade.Pine.Statements
 
                 protected override object Execute(PineSeries<bool> left, PineSeries<bool> right)
                 {
-                    return new PineSeries<bool>();
+                    return PineSeries.Or(left, right);
                 }
             }
             
@@ -199,7 +199,7 @@ namespace Razensoft.Trade.Pine.Statements
 
                 protected override object Execute(PineSeries<bool> left, PineSeries<bool> right)
                 {
-                    return new PineSeries<bool>();
+                    return PineSeries.And(left, right);
                 }
             }
             
@@ -207,9 +207,39 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class EqualsOperation : BinaryOperation
             {
-                public override object Execute(object left, object right)
+                protected override object Execute(int left, int right)
                 {
-                    return left.Equals(right);
+                    return left == right;
+                }
+
+                protected override object Execute(float left, float right)
+                {
+                    return left == right;
+                }
+
+                protected override object Execute(bool left, bool right)
+                {
+                    return left == right;
+                }
+
+                protected override object Execute(string left, string right)
+                {
+                    return left == right;
+                }
+
+                protected override object Execute(PineColor left, PineColor right)
+                {
+                    return left == right;
+                }
+
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.Equals(left, right);
+                }
+
+                protected override object Execute(PineSeries<float> left, PineSeries<float> right)
+                {
+                    return PineSeries.Equals(left, right);
                 }
             }
             
@@ -217,9 +247,39 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class NotEqualsOperation : BinaryOperation
             {
-                public override object Execute(object left, object right)
+                protected override object Execute(int left, int right)
                 {
-                    return !left.Equals(right);
+                    return left != right;
+                }
+
+                protected override object Execute(float left, float right)
+                {
+                    return left != right;
+                }
+
+                protected override object Execute(bool left, bool right)
+                {
+                    return left != right;
+                }
+
+                protected override object Execute(string left, string right)
+                {
+                    return left != right;
+                }
+
+                protected override object Execute(PineColor left, PineColor right)
+                {
+                    return left != right;
+                }
+
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.NotEquals(left, right);
+                }
+
+                protected override object Execute(PineSeries<float> left, PineSeries<float> right)
+                {
+                    return PineSeries.NotEquals(left, right);
                 }
             }
             
@@ -231,15 +291,20 @@ namespace Razensoft.Trade.Pine.Statements
                 {
                     return left > right;
                 }
-                
+
                 protected override object Execute(float left, float right)
                 {
                     return left > right;
                 }
 
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.GreaterThan(left, right);
+                }
+
                 protected override object Execute(PineSeries<float> left, PineSeries<float> right)
                 {
-                    return new PineSeries<bool>();
+                    return PineSeries.GreaterThan(left, right);
                 }
             }
             
@@ -247,6 +312,25 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class GreaterThanOrEqualsOperation : BinaryOperation
             {
+                protected override object Execute(int left, int right)
+                {
+                    return left >= right;
+                }
+
+                protected override object Execute(float left, float right)
+                {
+                    return left >= right;
+                }
+
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.GreaterThanOrEquals(left, right);
+                }
+
+                protected override object Execute(PineSeries<float> left, PineSeries<float> right)
+                {
+                    return PineSeries.GreaterThanOrEquals(left, right);
+                }
             }
             
             public static BinaryOperation LowerThan { get; } = new LowerThanOperation();
@@ -257,15 +341,20 @@ namespace Razensoft.Trade.Pine.Statements
                 {
                     return left < right;
                 }
-                
+
                 protected override object Execute(float left, float right)
                 {
                     return left < right;
                 }
 
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.LowerThan(left, right);
+                }
+
                 protected override object Execute(PineSeries<float> left, PineSeries<float> right)
                 {
-                    return new PineSeries<bool>();
+                    return PineSeries.LowerThan(left, right);
                 }
             }
             
@@ -273,15 +362,49 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class LowerThanOrEqualsOperation : BinaryOperation
             {
+                protected override object Execute(int left, int right)
+                {
+                    return left <= right;
+                }
+
+                protected override object Execute(float left, float right)
+                {
+                    return left <= right;
+                }
+
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.LowerThanOrEquals(left, right);
+                }
+
+                protected override object Execute(PineSeries<float> left, PineSeries<float> right)
+                {
+                    return PineSeries.LowerThanOrEquals(left, right);
+                }
             }
             
             public static BinaryOperation Add { get; } = new AddOperation();
 
             private class AddOperation : BinaryOperation
             {
+                protected override object Execute(int left, int right)
+                {
+                    return left + right;
+                }
+
+                protected override object Execute(float left, float right)
+                {
+                    return left + right;
+                }
+
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.Add(left, right);
+                }
+
                 protected override object Execute(PineSeries<float> left, PineSeries<float> right)
                 {
-                    return new PineSeries<float>();
+                    return PineSeries.Add(left, right);
                 }
             }
             
@@ -289,9 +412,24 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class SubtractOperation : BinaryOperation
             {
+                protected override object Execute(int left, int right)
+                {
+                    return left - right;
+                }
+
+                protected override object Execute(float left, float right)
+                {
+                    return left - right;
+                }
+
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.Subtract(left, right);
+                }
+
                 protected override object Execute(PineSeries<float> left, PineSeries<float> right)
                 {
-                    return new PineSeries<float>();
+                    return PineSeries.Subtract(left, right);
                 }
             }
             
@@ -299,9 +437,24 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class MultiplyOperation : BinaryOperation
             {
+                protected override object Execute(int left, int right)
+                {
+                    return left * right;
+                }
+
+                protected override object Execute(float left, float right)
+                {
+                    return left * right;
+                }
+
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.Multiply(left, right);
+                }
+
                 protected override object Execute(PineSeries<float> left, PineSeries<float> right)
                 {
-                    return new PineSeries<float>();
+                    return PineSeries.Multiply(left, right);
                 }
             }
             
@@ -309,9 +462,24 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class DivideOperation : BinaryOperation
             {
+                protected override object Execute(int left, int right)
+                {
+                    return left / right;
+                }
+
+                protected override object Execute(float left, float right)
+                {
+                    return left / right;
+                }
+
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.Divide(left, right);
+                }
+
                 protected override object Execute(PineSeries<float> left, PineSeries<float> right)
                 {
-                    return new PineSeries<float>();
+                    return PineSeries.Divide(left, right);
                 }
             }
             
@@ -319,6 +487,25 @@ namespace Razensoft.Trade.Pine.Statements
 
             private class ModuloOperation : BinaryOperation
             {
+                protected override object Execute(int left, int right)
+                {
+                    return left % right;
+                }
+
+                protected override object Execute(float left, float right)
+                {
+                    return left % right;
+                }
+
+                protected override object Execute(PineSeries<int> left, PineSeries<int> right)
+                {
+                    return PineSeries.Modulo(left, right);
+                }
+
+                protected override object Execute(PineSeries<float> left, PineSeries<float> right)
+                {
+                    return PineSeries.Modulo(left, right);
+                }
             }
         }
     }

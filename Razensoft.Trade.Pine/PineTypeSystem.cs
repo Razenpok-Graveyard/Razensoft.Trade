@@ -61,6 +61,11 @@ namespace Razensoft.Trade.Pine
             typeCast.Add(typeof(TTo), value => cast((TFrom) value));
         }
 
+        public static T Convert<T>(object value)
+        {
+            return (T) Convert(value, typeof(T));
+        }
+
         public static object Convert(object value, Type to)
         {
             if (to.IsInstanceOfType(value))
@@ -89,8 +94,6 @@ namespace Razensoft.Trade.Pine
             {
                 _casts.Add(to, cast);
             }
-
-            public T Convert<T>(object value) => (T) Convert(value, typeof(T));
 
             public object Convert(object value, Type to)
             {

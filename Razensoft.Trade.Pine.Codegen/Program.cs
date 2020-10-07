@@ -237,12 +237,9 @@ namespace Razensoft.Trade.Pine.Codegen
             sb.AppendLine();
             sb.AppendLine("namespace Razensoft.Trade.Pine");
             sb.AppendLine("{");
-            sb.AppendLine("    public partial class PineSeries<T>");
-            sb.AppendLine("    {");
 
             void WriteCombinatorOperator(
-                string name, string @operator, bool overloadOperator,
-                params (string left, string right, string @return)[] overloads)
+                string name, string @operator, params (string left, string right, string @return)[] overloads)
             {
                 foreach (var (left, right, @return) in overloads)
                 {
@@ -250,24 +247,25 @@ namespace Razensoft.Trade.Pine.Codegen
                         $"        public static PineSeries<{@return}> {name}(PineSeries<{left}> left, PineSeries<{right}> right)");
                     sb.AppendLine("        {");
                     sb.AppendLine(
-                        $"            return new CombinationSeries<{left}, {right}, {@return}>(left, right, (l, r) => l {@operator} r);");
+                        $"            return PineSeries<{@return}>.Combine(left, right, (l, r) => l {@operator} r);");
                     sb.AppendLine("        }");
                     sb.AppendLine();
-                    if (overloadOperator)
-                    {
-                        sb.AppendLine(
-                            $"        public static PineSeries<{@return}> operator {@operator}(PineSeries<{left}> left, PineSeries<{right}> right)");
-                        sb.AppendLine("        {");
-                        sb.AppendLine(
-                            $"            return new CombinationSeries<{left}, {right}, {@return}>(left, right, (l, r) => l {@operator} r);");
-                        sb.AppendLine("        }");
-                        sb.AppendLine();
-                    }
                 }
             }
 
+            void WriteCombinatorOperatorOverload(string @operator)
+            {
+                sb.AppendLine(
+                    $"        public static PineSeries<T> operator {@operator}(PineSeries<T> left, PineSeries<T> right)");
+                sb.AppendLine("        {");
+                sb.AppendLine(
+                    $"            return PineSeries<T>.Combine(left, right, (l, r) => (dynamic) l {@operator} (dynamic) r);");
+                sb.AppendLine("        }");
+                sb.AppendLine();
+            }
+
             void WriteTransformationOperator(
-                string name, string @operator, bool overloadOperator, params (string left, string right, string @return)[] overloads)
+                string name, string @operator, params (string left, string right, string @return)[] overloads)
             {
                 foreach (var (left, right, @return) in overloads)
                 {
@@ -275,121 +273,150 @@ namespace Razensoft.Trade.Pine.Codegen
                         $"        public static PineSeries<{@return}> {name}(PineSeries<{left}> left, {right} right)");
                     sb.AppendLine("        {");
                     sb.AppendLine(
-                        $"            return new TransformationSeries<{left}, {@return}>(left, v => v {@operator} right);");
+                        $"            return PineSeries<{@return}>.Transform(left, v => v {@operator} right);");
                     sb.AppendLine("        }");
                     sb.AppendLine();
-                    if (overloadOperator)
-                    {
-                        sb.AppendLine(
-                            $"        public static PineSeries<{@return}> operator {@operator}(PineSeries<{left}> left, {right} right)");
-                        sb.AppendLine("        {");
-                        sb.AppendLine(
-                            $"            return new TransformationSeries<{left}, {@return}>(left, v => v {@operator} right);");
-                        sb.AppendLine("        }");
-                        sb.AppendLine();
-                    }
                 }
             }
 
-            void WriteOperator(
-                string name, string @operator, bool overloadOperator,
-                params (string left, string right, string @return)[] overloads)
+            void WriteTransformationOperatorOverload(string @operator)
             {
-                WriteCombinatorOperator(name, @operator, overloadOperator, overloads);
-                WriteTransformationOperator(name, @operator, overloadOperator, overloads);
+                sb.AppendLine(
+                    $"        public static PineSeries<T> operator {@operator}(PineSeries<T> left, T right)");
+                sb.AppendLine("        {");
+                sb.AppendLine(
+                    $"            return PineSeries<T>.Transform(left, v => (dynamic) v {@operator} (dynamic) right);");
+                sb.AppendLine("        }");
+                sb.AppendLine();
             }
 
-            WriteOperator(
-                "Add", "+", true,
-                ("int", "int", "int"),
-                ("int", "float", "float"),
-                ("float", "float", "float"),
-                ("float", "int", "float")
-            );
+            void WriteOperators(string className, bool operatorOverloads)
+            {
+                void WriteOperator(
+                    string name, string @operator, params (string left, string right, string @return)[] overloads)
+                {
+                    if (operatorOverloads)
+                    {
+                        WriteCombinatorOperatorOverload(@operator);
+                        WriteTransformationOperatorOverload(@operator);
+                    }
+                    else
+                    {
+                        WriteCombinatorOperator(name, @operator, overloads);
+                        WriteTransformationOperator(name, @operator, overloads);
+                    }
+                }
 
-            WriteOperator(
-                "Subtract", "-", true,
-                ("int", "int", "int"),
-                ("int", "float", "float"),
-                ("float", "float", "float"),
-                ("float", "int", "float")
-            );
+                sb.AppendLine($"    public partial class {className}");
+                sb.AppendLine("    {");
 
-            WriteOperator(
-                "Multiply", "*", true,
-                ("int", "int", "int"),
-                ("int", "float", "float"),
-                ("float", "float", "float"),
-                ("float", "int", "float")
-            );
+                WriteOperator(
+                    "Add", "+",
+                    ("int", "int", "int"),
+                    ("int", "float", "float"),
+                    ("float", "float", "float"),
+                    ("float", "int", "float")
+                );
 
-            WriteOperator(
-                "Divide", "/", true,
-                ("int", "int", "float"),
-                ("int", "float", "float"),
-                ("float", "float", "float"),
-                ("float", "int", "float")
-            );
+                WriteOperator(
+                    "Subtract", "-",
+                    ("int", "int", "int"),
+                    ("int", "float", "float"),
+                    ("float", "float", "float"),
+                    ("float", "int", "float")
+                );
 
-            WriteOperator(
-                "GreaterThan", ">", true,
-                ("int", "int", "bool"),
-                ("int", "float", "bool"),
-                ("float", "float", "bool"),
-                ("float", "int", "bool")
-            );
+                WriteOperator(
+                    "Multiply", "*",
+                    ("int", "int", "int"),
+                    ("int", "float", "float"),
+                    ("float", "float", "float"),
+                    ("float", "int", "float")
+                );
 
-            WriteOperator(
-                "GreaterThanOrEquals", ">=", true,
-                ("int", "int", "bool"),
-                ("int", "float", "bool"),
-                ("float", "float", "bool"),
-                ("float", "int", "bool")
-            );
-            
-            WriteOperator(
-                "LowerThan", "<", true,
-                ("int", "int", "bool"),
-                ("int", "float", "bool"),
-                ("float", "float", "bool"),
-                ("float", "int", "bool")
-            );
+                WriteOperator(
+                    "Divide", "/",
+                    ("int", "int", "int"),
+                    ("int", "float", "float"),
+                    ("float", "float", "float"),
+                    ("float", "int", "float")
+                );
 
-            WriteOperator(
-                "LowerThanOrEquals", "<=", true,
-                ("int", "int", "bool"),
-                ("int", "float", "bool"),
-                ("float", "float", "bool"),
-                ("float", "int", "bool")
-            );
+                WriteOperator(
+                    "Modulo", "%",
+                    ("int", "int", "int"),
+                    ("int", "float", "float"),
+                    ("float", "float", "float"),
+                    ("float", "int", "float")
+                );
 
-            WriteOperator(
-                "Equals", "==", true,
-                ("int", "int", "bool"),
-                ("int", "float", "bool"),
-                ("float", "float", "bool"),
-                ("float", "int", "bool")
-            );
+                WriteOperator(
+                    "GreaterThan", ">",
+                    ("int", "int", "bool"),
+                    ("int", "float", "bool"),
+                    ("float", "float", "bool"),
+                    ("float", "int", "bool")
+                );
 
-            WriteOperator(
-                "NotEquals", "!=", true,
-                ("int", "int", "bool"),
-                ("int", "float", "bool"),
-                ("float", "float", "bool"),
-                ("float", "int", "bool")
-            );
+                WriteOperator(
+                    "GreaterThanOrEquals", ">=",
+                    ("int", "int", "bool"),
+                    ("int", "float", "bool"),
+                    ("float", "float", "bool"),
+                    ("float", "int", "bool")
+                );
 
-            WriteOperator(
-                "And", "&&", false,
-                ("bool", "bool", "bool")
-            );
+                WriteOperator(
+                    "LowerThan", "<",
+                    ("int", "int", "bool"),
+                    ("int", "float", "bool"),
+                    ("float", "float", "bool"),
+                    ("float", "int", "bool")
+                );
 
-            WriteOperator(
-                "Or", "||", false,
-                ("bool", "bool", "bool")
-            );
-            
-            sb.AppendLine("    }");
+                WriteOperator(
+                    "LowerThanOrEquals", "<=",
+                    ("int", "int", "bool"),
+                    ("int", "float", "bool"),
+                    ("float", "float", "bool"),
+                    ("float", "int", "bool")
+                );
+
+                WriteOperator(
+                    "Equals", "==",
+                    ("int", "int", "bool"),
+                    ("int", "float", "bool"),
+                    ("float", "float", "bool"),
+                    ("float", "int", "bool")
+                );
+
+                WriteOperator(
+                    "NotEquals", "!=",
+                    ("int", "int", "bool"),
+                    ("int", "float", "bool"),
+                    ("float", "float", "bool"),
+                    ("float", "int", "bool")
+                );
+
+                if (!operatorOverloads)
+                {
+                    WriteOperator(
+                        "And", "&&",
+                        ("bool", "bool", "bool")
+                    );
+
+                    WriteOperator(
+                        "Or", "||",
+                        ("bool", "bool", "bool")
+                    );
+                }
+
+
+                sb.AppendLine("    }");
+            }
+
+            WriteOperators("PineSeries", false);
+            WriteOperators("PineSeries<T>", true);
             sb.AppendLine("}");
 
             var solutionDirectory = GetSolutionDirectory();
