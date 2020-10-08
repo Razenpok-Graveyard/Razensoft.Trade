@@ -16,25 +16,30 @@ namespace Razensoft.Trade.Pine
         public override PineScriptStatement VisitVariableDeclaration(PineScriptParser.VariableDeclarationContext context)
         {
             var name = context.ID().GetText();
-            var value = context.GetChild(2).Accept(this);
+            var value = context.variableValue().Accept(this);
             return new VariableDeclarationStatement(name, value);
         }
 
         public override PineScriptStatement VisitVariableAssignment(PineScriptParser.VariableAssignmentContext context)
         {
             var name = context.ID().GetText();
-            var value = context.GetChild(2).Accept(this);
+            var value = context.variableValue().Accept(this);
             return new VariableAssignmentStatement(name, value);
+        }
+
+        public override PineScriptStatement VisitVariableValue(PineScriptParser.VariableValueContext context)
+        {
+            return context.GetChild(0).Accept(this);
         }
 
         public override PineScriptStatement VisitFunctionDeclaration(PineScriptParser.FunctionDeclarationContext context)
         {
             var name = context.ID().GetText();
-            var parametersContext = context.functionParameters();
-            var parameters = parametersContext.ID()
+            var parameters = context.functionParameters()
+                .ID()
                 .Select(id => id.GetText())
                 .ToArray();
-            var body = context.GetChild(5).Accept(this);
+            var body = context.functionBody().Accept(this);
             return new FunctionDeclarationStatement(name, parameters, body);
         }
 
@@ -48,23 +53,6 @@ namespace Razensoft.Trade.Pine
                 .Where(arg => arg != null)
                 .ToArray();
             return new FunctionCallStatement(name, args);
-        }
-
-        public override PineScriptStatement VisitTernary(PineScriptParser.TernaryContext context)
-        {
-            var expressions = context.expression();
-            var condition = expressions[0].Accept(this);
-            var truthyExpression = expressions[1].Accept(this);
-            PineScriptStatement falsyExpression;
-            if (expressions.Length == 3)
-            {
-                falsyExpression = expressions[2].Accept(this);
-            }
-            else
-            {
-                falsyExpression = context.ternary().Accept(this);
-            }
-            return new TernaryExpression(condition, truthyExpression, falsyExpression);
         }
 
         public override PineScriptStatement VisitConditional(PineScriptParser.ConditionalContext context)
@@ -99,34 +87,54 @@ namespace Razensoft.Trade.Pine
             return new StatementBlock(statements);
         }
 
-        public override PineScriptStatement VisitLiteralExpression(PineScriptParser.LiteralExpressionContext context)
+        public override PineScriptStatement VisitIntExpression(PineScriptParser.IntExpressionContext context)
         {
-            static PineScriptStatement ParseLiteral<T>(IParseTree node, Func<string, T> parse)
-            {
-                return node != null ? new LiteralStatement(parse(node.GetText())) : null;
-            }
-
-            return ParseLiteral(context.BOOL_LITERAL(), bool.Parse) ??
-                   ParseLiteral(context.STR_LITERAL(), literal => literal.Trim('"')) ??
-                   ParseLiteral(context.COLOR_LITERAL(), literal => literal) ??
-                   ParseLiteral(context.INT_LITERAL(), literal =>
-                   {
-                       var value = long.Parse(literal);
-                       return context.MINUS() != null ? -value : value;
-                   }) ??
-                   ParseLiteral(context.FLOAT_LITERAL(), literal =>
-                   {
-                       var value = float.Parse(literal);
-                       return context.MINUS() != null ? -value : value;
-                   });
+            return new LiteralStatement(long.Parse(context.GetText()));
         }
 
-        public override PineScriptStatement VisitCallExpression(PineScriptParser.CallExpressionContext context)
+        public override PineScriptStatement VisitColorExpression(PineScriptParser.ColorExpressionContext context)
         {
-            var functionCall = context.functionCall().Accept(this);
-            if (context.NOT() != null) return UnaryExpression.Not(functionCall);
-            if (context.MINUS() != null) return UnaryExpression.Minus(functionCall);
-            return functionCall;
+            return new LiteralStatement(new PineColor());
+        }
+
+        public override PineScriptStatement VisitStringExpression(PineScriptParser.StringExpressionContext context)
+        {
+            return new LiteralStatement(context.GetText().Trim('"'));
+        }
+
+        public override PineScriptStatement VisitFloatExpression(PineScriptParser.FloatExpressionContext context)
+        {
+            return new LiteralStatement(float.Parse(context.GetText()));
+        }
+
+        public override PineScriptStatement VisitBoolExpression(PineScriptParser.BoolExpressionContext context)
+        {
+            return new LiteralStatement(bool.Parse(context.GetText()));
+        }
+
+        public override PineScriptStatement VisitFunctionCallExpression(PineScriptParser.FunctionCallExpressionContext context)
+        {
+            return context.functionCall().Accept(this);
+        }
+
+        public override PineScriptStatement VisitNotExpression(PineScriptParser.NotExpressionContext context)
+        {
+            var expression = context.expression().Accept(this);
+            return UnaryExpression.Not(expression);
+        }
+
+        public override PineScriptStatement VisitUnaryMinusExpression(PineScriptParser.UnaryMinusExpressionContext context)
+        {
+            var expression = context.expression().Accept(this);
+            return UnaryExpression.Minus(expression);
+        }
+
+        public override PineScriptStatement VisitTernaryExpression(PineScriptParser.TernaryExpressionContext context)
+        {
+            var condition = context.expression(0).Accept(this);
+            var truthyExpression = context.expression(1).Accept(this);
+            var falsyExpression = context.expression(2).Accept(this);
+            return new TernaryExpression(condition, truthyExpression, falsyExpression);
         }
 
         public override PineScriptStatement VisitBinaryOperationExpression(PineScriptParser.BinaryOperationExpressionContext context)
@@ -134,30 +142,27 @@ namespace Razensoft.Trade.Pine
             var expressions = context.expression();
             var left = expressions[0].Accept(this);
             var right = expressions[1].Accept(this);
-            if (context.OR() != null) return BinaryExpression.Or(left, right);
-            if (context.AND() != null) return BinaryExpression.And(left, right);
-            if (context.EQ() != null) return BinaryExpression.Equals(left, right);
-            if (context.NEQ() != null) return BinaryExpression.NotEquals(left, right);
-            if (context.GT() != null) return BinaryExpression.GreaterThan(left, right);
-            if (context.GE() != null) return BinaryExpression.GreaterThanOrEquals(left, right);
-            if (context.LT() != null) return BinaryExpression.LowerThan(left, right);
-            if (context.LE() != null) return BinaryExpression.LowerThanOrEquals(left, right);
-            if (context.PLUS() != null) return BinaryExpression.Add(left, right);
-            if (context.MINUS() != null) return BinaryExpression.Subtract(left, right);
-            if (context.MUL() != null) return BinaryExpression.Multiply(left, right);
-            if (context.DIV() != null) return BinaryExpression.Divide(left, right);
-            if (context.MOD() != null) return BinaryExpression.Modulo(left, right);
-            throw new Exception("Unknown binary operator");
+            return context.op.Text switch
+            {
+                "or" => BinaryExpression.Or(left, right),
+                "and" => BinaryExpression.And(left, right),
+                "==" => BinaryExpression.Equals(left, right),
+                "!=" => BinaryExpression.NotEquals(left, right),
+                ">" => BinaryExpression.GreaterThan(left, right),
+                ">=" => BinaryExpression.GreaterThanOrEquals(left, right),
+                "<" => BinaryExpression.LowerThan(left, right),
+                "<=" => BinaryExpression.LowerThanOrEquals(left, right),
+                "+" => BinaryExpression.Add(left, right),
+                "-" => BinaryExpression.Subtract(left, right),
+                "*" => BinaryExpression.Multiply(left, right),
+                "/" => BinaryExpression.Divide(left, right),
+                "%" => BinaryExpression.Modulo(left, right),
+                _ => throw new Exception("Unknown binary operator")
+            };
         }
 
         public override PineScriptStatement VisitGroupExpression(PineScriptParser.GroupExpressionContext context)
         {
-            var ternary = context.ternary();
-            if (ternary != null)
-            {
-                return ternary.Accept(this);
-            }
-
             return context.expression().Accept(this);
         }
 
@@ -174,8 +179,6 @@ namespace Razensoft.Trade.Pine
             {
                 statement = context.seriesAccess().Accept(this);
             }
-            if (context.NOT() != null) return UnaryExpression.Not(statement);
-            if (context.MINUS() != null) return UnaryExpression.Minus(statement);
             return statement;
         }
 

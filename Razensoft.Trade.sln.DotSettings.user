@@ -1,5 +1,10 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=13470b21_002D9e27_002D4740_002Db7e8_002D037885b16d55/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Should_not_call_entry_when_not_appropriate" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=13470b21_002D9e27_002D4740_002Db7e8_002D037885b16d55/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Should_not_call_entry_when_not_appropriate" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::D57A834D-47A1-448F-9631-DCA962E544C1::.NETCoreApp,Version=v3.1::Razensoft.Trade.Pine.Parsing.Tests.Tests.SuperTrendTests.Should_not_call_entry_when_not_appropriate&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=83c3479f_002D5c6d_002D44c8_002Dbc9f_002De024e50a1d30/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Should_not_call_entry_when_not_appropriate #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::D57A834D-47A1-448F-9631-DCA962E544C1::.NETCoreApp,Version=v3.1::Razensoft.Trade.Pine.Parsing.Tests.Tests.SuperTrendTests.Should_not_call_entry_when_not_appropriate&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;

@@ -70,35 +70,44 @@ statement :
     | conditional
     | loop;
 
-variableDeclaration: ID DEFINE ( expression | conditional | ternary | loop );
-variableAssignment: ID ASSIGN ( expression | conditional | ternary | loop);
+variableDeclaration: ID '=' variableValue;
+variableAssignment: ID ':=' variableValue;
+variableValue: expression | conditional | loop;
 
-functionDeclaration: ID LPAR functionParameters RPAR ARROW (block | expression | ternary);
-functionParameters: ( ID (COMMA ID)* )?;
+functionDeclaration: ID '(' functionParameters ')' '=>' functionBody;
+functionParameters: (ID (',' ID)*)?;
+functionBody: block | expression;
 
-functionCall: ID LPAR functionArguments RPAR;
+functionCall: ID '(' functionArguments ')';
 functionArguments:
-    ((expression | ternary) (COMMA (expression | ternary))* (COMMA variableDeclaration)*)?
-    | (variableDeclaration (COMMA variableDeclaration)*)?;
+    (expression (',' expression)* (',' variableDeclaration)*)?
+    | (variableDeclaration (',' variableDeclaration)*)?;
 
 conditional: IF_COND expression block (IF_COND_ELSE conditional | IF_COND_ELSE block)?;
 
-loop: FOR_STMT variableDeclaration FOR_STMT_TO expression ( FOR_STMT_BY INT_LITERAL )? loopBody;
+loop: FOR_STMT variableDeclaration FOR_STMT_TO expression (FOR_STMT_BY INT_LITERAL)? loopBody;
 loopBody: BEGIN (statement | BREAK | CONTINUE)+ END;
 
-ternary: expression COND expression COND_ELSE ( LPAR ternary RPAR | ternary | expression );
-
-expression: ( MINUS? ( INT_LITERAL | FLOAT_LITERAL ) | BOOL_LITERAL | STR_LITERAL | COLOR_LITERAL ) #LiteralExpression
-    | (NOT|MINUS)? functionCall #CallExpression
-    | (NOT|MINUS)? ( seriesAccess | ID ) #IdentifierExpression
-    | LPAR ( ternary | expression ) RPAR #GroupExpression
-    | expression (MUL | DIV | MOD) expression #BinaryOperationExpression
-    | expression (PLUS | MINUS) expression #BinaryOperationExpression
-    | expression (GT | GE | LT | LE) expression #BinaryOperationExpression
-    | expression (EQ | NEQ) expression #BinaryOperationExpression
-    | expression OR expression #BinaryOperationExpression
-    | expression AND expression #BinaryOperationExpression
+expression
+    : '-' expression #UnaryMinusExpression
+    | 'not' expression #NotExpression
+    | expression op=('*' | '/' | '%') expression #BinaryOperationExpression
+    | expression op=('+' | '-') expression #BinaryOperationExpression
+    | expression op=('>=' | '<=' | '>' | '<') expression #BinaryOperationExpression
+    | expression op=('==' | '!=') expression #BinaryOperationExpression
+    | expression op='and' expression #BinaryOperationExpression
+    | expression op='or' expression #BinaryOperationExpression
+    | expression '?' expression ':' expression #TernaryExpression
+    | INT_LITERAL #IntExpression
+    | FLOAT_LITERAL #FloatExpression
+    | BOOL_LITERAL #BoolExpression
+    | STR_LITERAL #StringExpression
+    | COLOR_LITERAL #ColorExpression
+    | functionCall #FunctionCallExpression
+    | (seriesAccess | ID) #IdentifierExpression
+    | '(' expression ')' #GroupExpression
     ;
     
 seriesAccess: ID LSQBR expression RSQBR;
 
+// TODO: Look at ANTLR grammars and make this one fine

@@ -81,6 +81,16 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitVariableAssignment([NotNull] PineScriptParser.VariableAssignmentContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="PineScriptParser.variableValue"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterVariableValue([NotNull] PineScriptParser.VariableValueContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="PineScriptParser.variableValue"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitVariableValue([NotNull] PineScriptParser.VariableValueContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.functionDeclaration"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -100,6 +110,16 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitFunctionParameters([NotNull] PineScriptParser.FunctionParametersContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="PineScriptParser.functionBody"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFunctionBody([NotNull] PineScriptParser.FunctionBodyContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="PineScriptParser.functionBody"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFunctionBody([NotNull] PineScriptParser.FunctionBodyContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.functionCall"/>.
 	/// </summary>
@@ -151,15 +171,41 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitLoopBody([NotNull] PineScriptParser.LoopBodyContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.ternary"/>.
+	/// Enter a parse tree produced by the <c>TernaryExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterTernary([NotNull] PineScriptParser.TernaryContext context);
+	void EnterTernaryExpression([NotNull] PineScriptParser.TernaryExpressionContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.ternary"/>.
+	/// Exit a parse tree produced by the <c>TernaryExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitTernary([NotNull] PineScriptParser.TernaryContext context);
+	void ExitTernaryExpression([NotNull] PineScriptParser.TernaryExpressionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>ColorExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterColorExpression([NotNull] PineScriptParser.ColorExpressionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>ColorExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitColorExpression([NotNull] PineScriptParser.ColorExpressionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>UnaryMinusExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterUnaryMinusExpression([NotNull] PineScriptParser.UnaryMinusExpressionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>UnaryMinusExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitUnaryMinusExpression([NotNull] PineScriptParser.UnaryMinusExpressionContext context);
 	/// <summary>
 	/// Enter a parse tree produced by the <c>BinaryOperationExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
@@ -173,29 +219,53 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitBinaryOperationExpression([NotNull] PineScriptParser.BinaryOperationExpressionContext context);
 	/// <summary>
-	/// Enter a parse tree produced by the <c>LiteralExpression</c>
+	/// Enter a parse tree produced by the <c>IntExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterLiteralExpression([NotNull] PineScriptParser.LiteralExpressionContext context);
+	void EnterIntExpression([NotNull] PineScriptParser.IntExpressionContext context);
 	/// <summary>
-	/// Exit a parse tree produced by the <c>LiteralExpression</c>
+	/// Exit a parse tree produced by the <c>IntExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitLiteralExpression([NotNull] PineScriptParser.LiteralExpressionContext context);
+	void ExitIntExpression([NotNull] PineScriptParser.IntExpressionContext context);
 	/// <summary>
-	/// Enter a parse tree produced by the <c>CallExpression</c>
+	/// Enter a parse tree produced by the <c>StringExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterCallExpression([NotNull] PineScriptParser.CallExpressionContext context);
+	void EnterStringExpression([NotNull] PineScriptParser.StringExpressionContext context);
 	/// <summary>
-	/// Exit a parse tree produced by the <c>CallExpression</c>
+	/// Exit a parse tree produced by the <c>StringExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitCallExpression([NotNull] PineScriptParser.CallExpressionContext context);
+	void ExitStringExpression([NotNull] PineScriptParser.StringExpressionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>NotExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterNotExpression([NotNull] PineScriptParser.NotExpressionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>NotExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitNotExpression([NotNull] PineScriptParser.NotExpressionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>FloatExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFloatExpression([NotNull] PineScriptParser.FloatExpressionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>FloatExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFloatExpression([NotNull] PineScriptParser.FloatExpressionContext context);
 	/// <summary>
 	/// Enter a parse tree produced by the <c>GroupExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
@@ -208,6 +278,30 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitGroupExpression([NotNull] PineScriptParser.GroupExpressionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>FunctionCallExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFunctionCallExpression([NotNull] PineScriptParser.FunctionCallExpressionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>FunctionCallExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFunctionCallExpression([NotNull] PineScriptParser.FunctionCallExpressionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>BoolExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterBoolExpression([NotNull] PineScriptParser.BoolExpressionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>BoolExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitBoolExpression([NotNull] PineScriptParser.BoolExpressionContext context);
 	/// <summary>
 	/// Enter a parse tree produced by the <c>IdentifierExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.

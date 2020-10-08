@@ -62,6 +62,12 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitVariableAssignment([NotNull] PineScriptParser.VariableAssignmentContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="PineScriptParser.variableValue"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVariableValue([NotNull] PineScriptParser.VariableValueContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.functionDeclaration"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -73,6 +79,12 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitFunctionParameters([NotNull] PineScriptParser.FunctionParametersContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="PineScriptParser.functionBody"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFunctionBody([NotNull] PineScriptParser.FunctionBodyContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.functionCall"/>.
 	/// </summary>
@@ -104,11 +116,26 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitLoopBody([NotNull] PineScriptParser.LoopBodyContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.ternary"/>.
+	/// Visit a parse tree produced by the <c>TernaryExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitTernary([NotNull] PineScriptParser.TernaryContext context);
+	Result VisitTernaryExpression([NotNull] PineScriptParser.TernaryExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>ColorExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitColorExpression([NotNull] PineScriptParser.ColorExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>UnaryMinusExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUnaryMinusExpression([NotNull] PineScriptParser.UnaryMinusExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>BinaryOperationExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
@@ -117,19 +144,33 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitBinaryOperationExpression([NotNull] PineScriptParser.BinaryOperationExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>LiteralExpression</c>
+	/// Visit a parse tree produced by the <c>IntExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitLiteralExpression([NotNull] PineScriptParser.LiteralExpressionContext context);
+	Result VisitIntExpression([NotNull] PineScriptParser.IntExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>CallExpression</c>
+	/// Visit a parse tree produced by the <c>StringExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitCallExpression([NotNull] PineScriptParser.CallExpressionContext context);
+	Result VisitStringExpression([NotNull] PineScriptParser.StringExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>NotExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNotExpression([NotNull] PineScriptParser.NotExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>FloatExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFloatExpression([NotNull] PineScriptParser.FloatExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>GroupExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
@@ -137,6 +178,20 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitGroupExpression([NotNull] PineScriptParser.GroupExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>FunctionCallExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFunctionCallExpression([NotNull] PineScriptParser.FunctionCallExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>BoolExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitBoolExpression([NotNull] PineScriptParser.BoolExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>IdentifierExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
