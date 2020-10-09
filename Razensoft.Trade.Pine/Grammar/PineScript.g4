@@ -1,113 +1,226 @@
 grammar PineScript;
 
-COND : '?' ;
-COND_ELSE : ':' ;
-OR : 'or' ;
-AND : 'and' ;
-NOT : 'not' ;
-EQ : '==' ;
-NEQ : '!=' ;
-GT : '>' ;
-GE : '>=' ;
-LT : '<' ;
-LE : '<=' ;
-PLUS : '+' ;
-MINUS : '-' ;
-MUL : '*' ;
-DIV : '/' ;
-MOD : '%' ;
-COMMA : ',' ;
-ARROW : '=>' ;
-LPAR : '(' ;
-RPAR : ')' ;
-LSQBR : '[' ;
-RSQBR : ']' ;
-DEFINE : '=' ;
-IF_COND : 'if' ;
-IF_COND_ELSE : 'else' ;
-BEGIN : '|BEGIN|' ;
-END : '|END|' ;
-ASSIGN : ':=' ;
-FOR_STMT : 'for' ;
-FOR_STMT_TO : 'to' ;
-FOR_STMT_BY : 'by' ;
-BREAK : 'break' ;
-CONTINUE : 'continue' ;
-LBEG : '|B|' ;
-LEND : '|E|' ;
-PLEND : '|PE|' ;
-INT_LITERAL : ( '0' .. '9' )+ ;
-FLOAT_LITERAL : ( '.' DIGITS ( EXP )? | DIGITS ( '.' ( DIGITS ( EXP )? )? | EXP ) );
-STR_LITERAL : ( '"' ( ESC | ~ ( '\\' | '\n' | '"' ) )* '"' | '\'' ( ESC | ~ ( '\\' | '\n' | '\'' ) )* '\'' );
-BOOL_LITERAL : ( 'true' | 'false' );
-COLOR_LITERAL : ( '#' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT | '#' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT );
-ID : ( ID_LETTER ) ( ( '.' )? ( ID_BODY '.' )* ID_BODY )? ;
-ID_EX : ( ID_LETTER_EX ) ( ( '.' )? ( ID_BODY_EX '.' )* ID_BODY_EX )? ;
-INDENT : '|INDENT|' ;
-LINE_CONTINUATION : '|C|' ;
-EMPTY_LINE_V1 : '|EMPTY_V1|' ;
-EMPTY_LINE : '|EMPTY|' ;
-WHITESPACE : [\r\n\t ] -> skip;
-fragment ID_BODY : ( ID_LETTER | DIGIT )+ ;
-fragment ID_BODY_EX : ( ID_LETTER_EX | DIGIT )+ ;
-fragment ID_LETTER : ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ;
-fragment ID_LETTER_EX : ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '#' ) ;
-fragment DIGIT : ( '0' .. '9' ) ;
-fragment ESC : '\\' . ;
-fragment DIGITS : ( '0' .. '9' )+ ;
-fragment HEX_DIGIT : ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) ;
-fragment EXP : ( 'e' | 'E' ) ( '+' | '-' )? DIGITS ;
-Tokens : ( COND | COND_ELSE | OR | AND | NOT | EQ | NEQ | GT | GE | LT | LE | PLUS | MINUS | MUL | DIV | MOD | COMMA | ARROW | LPAR | RPAR | LSQBR | RSQBR | DEFINE | IF_COND | IF_COND_ELSE | BEGIN | END | ASSIGN | FOR_STMT | FOR_STMT_TO | FOR_STMT_BY | BREAK | CONTINUE | LBEG | LEND | PLEND | INT_LITERAL | FLOAT_LITERAL | STR_LITERAL | BOOL_LITERAL | COLOR_LITERAL | ID | ID_EX | INDENT | LINE_CONTINUATION | EMPTY_LINE_V1 | EMPTY_LINE | WHITESPACE );
+/// Parser
 
-script : statement+;
-block: BEGIN statement+ END;
+script
+    : statementList
+    ;
 
-statement :
-    variableDeclaration
-    | variableAssignment
-    | functionDeclaration
-    | functionCall
+block
+    : Begin statementList End
+    ;
+
+statement
+    : block
+    | variableDeclarationStatement
+    | variableAssignmentStatement
+    | functionDeclarationStatement
+    | functionCallStatement
     | conditional
-    | loop;
+    | loop
+    | return
+    | break
+    ;
 
-variableDeclaration: ID '=' variableValue;
-variableAssignment: ID ':=' variableValue;
-variableValue: expression | conditional | loop;
+statementList
+    : statement+
+    ;
 
-functionDeclaration: ID '(' functionParameters ')' '=>' functionBody;
-functionParameters: (ID (',' ID)*)?;
-functionBody: block | expression;
+variableDeclarationStatement
+    : Identifier '=' variableValue
+    ;
 
-functionCall: ID '(' functionArguments ')';
-functionArguments:
-    (expression (',' expression)* (',' variableDeclaration)*)?
-    | (variableDeclaration (',' variableDeclaration)*)?;
+variableAssignmentStatement
+    : Identifier ':=' variableValue
+    ;
 
-conditional: IF_COND expression block (IF_COND_ELSE conditional | IF_COND_ELSE block)?;
+variableValue
+    : expression
+    | conditional
+    | loop
+    ;
 
-loop: FOR_STMT variableDeclaration FOR_STMT_TO expression (FOR_STMT_BY INT_LITERAL)? loopBody;
-loopBody: BEGIN (statement | BREAK | CONTINUE)+ END;
+functionDeclarationStatement
+    : Identifier '(' functionParameters? ')' '=>' functionBody
+    ;
+
+functionParameters
+    : Identifier (',' Identifier)*
+    ;
+
+functionBody
+    : block
+    | expression
+    ;
+
+functionCallStatement
+    : Identifier '(' functionArguments? ')'
+    ;
+
+functionArguments
+    : positionalFunctionArgument (',' positionalFunctionArgument)* (',' namedFunctionArgument)*
+    | namedFunctionArgument (',' namedFunctionArgument)*
+    ;
+
+positionalFunctionArgument
+    : expression
+    ;
+
+namedFunctionArgument
+    : Identifier '=' expression
+    ;
+
+conditional
+    : If condition=expression then=block (Else else=conditionalElseBody)?
+    ;
+
+conditionalElseBody
+    : conditional
+    | block
+    ;
+
+loop
+    : 'for' loopCounter 'to' end=expression ('by' step=expression)? BEGIN loopBody END
+    ;
+
+loopCounter
+    : Identifier '=' expression
+    ;
+
+loopBody
+    : (statement | BREAK | CONTINUE)+
+    ;
 
 expression
-    : '-' expression #UnaryMinusExpression
-    | 'not' expression #NotExpression
-    | expression op=('*' | '/' | '%') expression #BinaryOperationExpression
-    | expression op=('+' | '-') expression #BinaryOperationExpression
-    | expression op=('>=' | '<=' | '>' | '<') expression #BinaryOperationExpression
-    | expression op=('==' | '!=') expression #BinaryOperationExpression
-    | expression op='and' expression #BinaryOperationExpression
-    | expression op='or' expression #BinaryOperationExpression
-    | expression '?' expression ':' expression #TernaryExpression
-    | INT_LITERAL #IntExpression
-    | FLOAT_LITERAL #FloatExpression
-    | BOOL_LITERAL #BoolExpression
-    | STR_LITERAL #StringExpression
-    | COLOR_LITERAL #ColorExpression
-    | functionCall #FunctionCallExpression
-    | (seriesAccess | ID) #IdentifierExpression
-    | '(' expression ')' #GroupExpression
+    : '-' expression                                        # UnaryMinusExpression
+    | 'not' expression                                      # NotExpression
+    | expression op=('*' | '/' | '%') expression            # BinaryOperationExpression
+    | expression op=('+' | '-') expression                  # BinaryOperationExpression
+    | expression op=('>=' | '<=' | '>' | '<') expression    # BinaryOperationExpression
+    | expression op=('==' | '!=') expression                # BinaryOperationExpression
+    | expression op='and' expression                        # BinaryOperationExpression
+    | expression op='or' expression                         # BinaryOperationExpression
+    | expression '?' expression ':' expression              # TernaryExpression
+    | literal                                               # LiteralExpression
+    | functionCallStatement                                 # FunctionCallExpression
+    | (seriesAccess | Identifier)                           # IdentifierExpression
+    | '(' expression ')'                                    # ParenthesizedExpression
     ;
-    
-seriesAccess: ID LSQBR expression RSQBR;
 
-// TODO: Look at ANTLR grammars and make this one fine
+literal
+    : INT_LITERAL       # IntLiteral
+    | FLOAT_LITERAL     # FloatLiteral
+    | BOOL_LITERAL      # BoolLiteral
+    | STR_LITERAL       # StringLiteral
+    | COLOR_LITERAL     # ColorLiteral
+    | 'na'              # NALiteral;
+    
+seriesAccess
+    : Identifier LSQBR expression RSQBR
+    ;
+
+
+/// Parser
+
+QuestionMark:                   '?';
+Colon:                          ':';
+Equals:                         '==';
+NotEquals:                      '!=';
+GreaterThan:                    '>';
+LessThan:                       '<';
+GreaterThanOrEquals:            '>=';
+LessThanOrEquals:               '<=';
+Plus:                           '+';
+Minus:                          '-';
+Multiply:                       '*';
+Divide:                         '/';
+Modulo:                         '%';
+Comma:                          ',';
+Arrow:                          '=>';
+OpenParen:                      '(';
+CloseParen:                     ')';
+OpenBracket:                    '[';
+CloseBracket:                   ']';
+Define:                         '=';
+Assign:                         ':=';
+
+/// Logical operators
+
+Or:                             'or';
+And:                            'and';
+Not:                            'not';
+
+/// Keywords
+
+If:                             'if';
+Else:                           'else';
+For:                            'for';
+To:                             'to';
+By:                             'by';
+Break:                          'break';
+Continue:                       'continue';
+
+/// Literals
+
+NALiteral:                      'na';
+
+IntegerLiteral:                 IntegerPart;
+
+FloatLiteral:                   IntegerPart '.' FractionPart ExponentPart?
+            |                   '.' FractionPart ExponentPart?
+            |                   IntegerPart ExponentPart;
+
+BooleanLiteral:                 'true'
+              |                 'false';
+
+StringLiteral:                  '"' (~["\\\n] | EscapeCharacter)* '"'
+             |                  '\'' (~['\\\n] | EscapeCharacter)* '\''
+             ;
+
+ColorLiteral:                   '#' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit (HexDigit HexDigit)?;
+
+/// Identifier
+
+Identifier:                     IdentifierStart IdentifierPart*;
+
+/// Block bounds
+
+Begin:                          '|BEGIN|';
+End:                            '|END|';
+
+Whitespace:                     [\r\n\t ] -> skip;
+
+
+fragment IntegerPart
+    : '0'
+    | [1-9] [0-9]*
+    ;
+
+fragment FractionPart
+    : [0-9]+
+    ;
+
+fragment ExponentPart
+    : [eE] [+-]? [0-9]+
+    ;
+
+fragment EscapeCharacter
+    : '\\' .
+    ;
+
+fragment HexDigit
+    : [0-9a-fA-F]
+    ;
+
+fragment IdentifierStart
+    : IdentifierLetter
+    ;
+
+fragment IdentifierPart
+    : IdentifierLetter
+    | [0-9]
+    ;
+
+fragment IdentifierLetter
+    : [a-zA-Z_]
+    ;

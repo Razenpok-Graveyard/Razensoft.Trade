@@ -104,6 +104,12 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitConditional([NotNull] PineScriptParser.ConditionalContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="PineScriptParser.conditionalElseBody"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitConditionalElseBody([NotNull] PineScriptParser.ConditionalElseBodyContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.loop"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -116,19 +122,19 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitLoopBody([NotNull] PineScriptParser.LoopBodyContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>ParenthesizedExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitParenthesizedExpression([NotNull] PineScriptParser.ParenthesizedExpressionContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>TernaryExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitTernaryExpression([NotNull] PineScriptParser.TernaryExpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>ColorExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitColorExpression([NotNull] PineScriptParser.ColorExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>UnaryMinusExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
@@ -144,19 +150,12 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitBinaryOperationExpression([NotNull] PineScriptParser.BinaryOperationExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>IntExpression</c>
+	/// Visit a parse tree produced by the <c>LiteralExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitIntExpression([NotNull] PineScriptParser.IntExpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>StringExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitStringExpression([NotNull] PineScriptParser.StringExpressionContext context);
+	Result VisitLiteralExpression([NotNull] PineScriptParser.LiteralExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>NotExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
@@ -165,20 +164,6 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitNotExpression([NotNull] PineScriptParser.NotExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>FloatExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitFloatExpression([NotNull] PineScriptParser.FloatExpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>GroupExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitGroupExpression([NotNull] PineScriptParser.GroupExpressionContext context);
-	/// <summary>
 	/// Visit a parse tree produced by the <c>FunctionCallExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
@@ -186,19 +171,54 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitFunctionCallExpression([NotNull] PineScriptParser.FunctionCallExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>BoolExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitBoolExpression([NotNull] PineScriptParser.BoolExpressionContext context);
-	/// <summary>
 	/// Visit a parse tree produced by the <c>IdentifierExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitIdentifierExpression([NotNull] PineScriptParser.IdentifierExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>IntLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIntLiteral([NotNull] PineScriptParser.IntLiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>FloatLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFloatLiteral([NotNull] PineScriptParser.FloatLiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>BoolLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitBoolLiteral([NotNull] PineScriptParser.BoolLiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>StringLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitStringLiteral([NotNull] PineScriptParser.StringLiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>ColorLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitColorLiteral([NotNull] PineScriptParser.ColorLiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>NALiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNALiteral([NotNull] PineScriptParser.NALiteralContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.seriesAccess"/>.
 	/// </summary>

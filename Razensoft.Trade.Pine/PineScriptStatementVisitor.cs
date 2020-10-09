@@ -7,10 +7,10 @@ namespace Razensoft.Trade.Pine
 {
     public class PineScriptStatementVisitor : PineScriptBaseVisitor<PineScriptStatement>
     {
-        public override PineScriptStatement VisitStatement(PineScriptParser.StatementContext context)
+        public override PineScriptStatement VisitBlock(PineScriptParser.BlockContext context)
         {
-            context.GetChild(0).Accept(this);
-            return base.VisitStatement(context);
+            var statements = context.statement().Select(Visit).ToArray();
+            return new StatementBlock(statements);
         }
 
         public override PineScriptStatement VisitVariableDeclaration(PineScriptParser.VariableDeclarationContext context)
@@ -27,14 +27,9 @@ namespace Razensoft.Trade.Pine
             return new VariableAssignmentStatement(name, value);
         }
 
-        public override PineScriptStatement VisitVariableValue(PineScriptParser.VariableValueContext context)
-        {
-            return context.GetChild(0).Accept(this);
-        }
-
         public override PineScriptStatement VisitFunctionDeclaration(PineScriptParser.FunctionDeclarationContext context)
         {
-            var name = context.ID().GetText();
+            var name = context.name.Text;
             var parameters = context.functionParameters()
                 .ID()
                 .Select(id => id.GetText())
@@ -77,39 +72,6 @@ namespace Razensoft.Trade.Pine
                 step = int.Parse(stepToken.GetText());
             }
             return new LoopStatement(counterDeclaration, endValue, body, step);
-        }
-
-        public override PineScriptStatement VisitBlock(PineScriptParser.BlockContext context)
-        {
-            var statements = context.statement()
-                .Select(statement => statement.Accept(this))
-                .ToArray();
-            return new StatementBlock(statements);
-        }
-
-        public override PineScriptStatement VisitIntExpression(PineScriptParser.IntExpressionContext context)
-        {
-            return new LiteralStatement(long.Parse(context.GetText()));
-        }
-
-        public override PineScriptStatement VisitColorExpression(PineScriptParser.ColorExpressionContext context)
-        {
-            return new LiteralStatement(new PineColor());
-        }
-
-        public override PineScriptStatement VisitStringExpression(PineScriptParser.StringExpressionContext context)
-        {
-            return new LiteralStatement(context.GetText().Trim('"'));
-        }
-
-        public override PineScriptStatement VisitFloatExpression(PineScriptParser.FloatExpressionContext context)
-        {
-            return new LiteralStatement(float.Parse(context.GetText()));
-        }
-
-        public override PineScriptStatement VisitBoolExpression(PineScriptParser.BoolExpressionContext context)
-        {
-            return new LiteralStatement(bool.Parse(context.GetText()));
         }
 
         public override PineScriptStatement VisitFunctionCallExpression(PineScriptParser.FunctionCallExpressionContext context)
@@ -161,7 +123,7 @@ namespace Razensoft.Trade.Pine
             };
         }
 
-        public override PineScriptStatement VisitGroupExpression(PineScriptParser.GroupExpressionContext context)
+        public override PineScriptStatement VisitParenthesizedExpression(PineScriptParser.ParenthesizedExpressionContext context)
         {
             return context.expression().Accept(this);
         }
@@ -180,6 +142,31 @@ namespace Razensoft.Trade.Pine
                 statement = context.seriesAccess().Accept(this);
             }
             return statement;
+        }
+
+        public override PineScriptStatement VisitIntLiteral(PineScriptParser.IntLiteralContext context)
+        {
+            return new LiteralStatement(long.Parse(context.GetText()));
+        }
+
+        public override PineScriptStatement VisitColorLiteral(PineScriptParser.ColorLiteralContext context)
+        {
+            return new LiteralStatement(new PineColor());
+        }
+
+        public override PineScriptStatement VisitStringLiteral(PineScriptParser.StringLiteralContext context)
+        {
+            return new LiteralStatement(context.GetText().Trim('"'));
+        }
+
+        public override PineScriptStatement VisitFloatLiteral(PineScriptParser.FloatLiteralContext context)
+        {
+            return new LiteralStatement(float.Parse(context.GetText()));
+        }
+
+        public override PineScriptStatement VisitBoolLiteral(PineScriptParser.BoolLiteralContext context)
+        {
+            return new LiteralStatement(bool.Parse(context.GetText()));
         }
 
         public override PineScriptStatement VisitSeriesAccess(PineScriptParser.SeriesAccessContext context)

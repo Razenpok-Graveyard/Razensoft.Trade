@@ -179,6 +179,18 @@ public partial class PineScriptBaseListener : IPineScriptListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitConditional([NotNull] PineScriptParser.ConditionalContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="PineScriptParser.conditionalElseBody"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterConditionalElseBody([NotNull] PineScriptParser.ConditionalElseBodyContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="PineScriptParser.conditionalElseBody"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitConditionalElseBody([NotNull] PineScriptParser.ConditionalElseBodyContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.loop"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -203,6 +215,20 @@ public partial class PineScriptBaseListener : IPineScriptListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitLoopBody([NotNull] PineScriptParser.LoopBodyContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by the <c>ParenthesizedExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterParenthesizedExpression([NotNull] PineScriptParser.ParenthesizedExpressionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>ParenthesizedExpression</c>
+	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitParenthesizedExpression([NotNull] PineScriptParser.ParenthesizedExpressionContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by the <c>TernaryExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -216,20 +242,6 @@ public partial class PineScriptBaseListener : IPineScriptListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitTernaryExpression([NotNull] PineScriptParser.TernaryExpressionContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by the <c>ColorExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterColorExpression([NotNull] PineScriptParser.ColorExpressionContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by the <c>ColorExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitColorExpression([NotNull] PineScriptParser.ColorExpressionContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by the <c>UnaryMinusExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
@@ -259,33 +271,19 @@ public partial class PineScriptBaseListener : IPineScriptListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitBinaryOperationExpression([NotNull] PineScriptParser.BinaryOperationExpressionContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by the <c>IntExpression</c>
+	/// Enter a parse tree produced by the <c>LiteralExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterIntExpression([NotNull] PineScriptParser.IntExpressionContext context) { }
+	public virtual void EnterLiteralExpression([NotNull] PineScriptParser.LiteralExpressionContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by the <c>IntExpression</c>
+	/// Exit a parse tree produced by the <c>LiteralExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitIntExpression([NotNull] PineScriptParser.IntExpressionContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by the <c>StringExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterStringExpression([NotNull] PineScriptParser.StringExpressionContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by the <c>StringExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitStringExpression([NotNull] PineScriptParser.StringExpressionContext context) { }
+	public virtual void ExitLiteralExpression([NotNull] PineScriptParser.LiteralExpressionContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by the <c>NotExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
@@ -301,34 +299,6 @@ public partial class PineScriptBaseListener : IPineScriptListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitNotExpression([NotNull] PineScriptParser.NotExpressionContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by the <c>FloatExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterFloatExpression([NotNull] PineScriptParser.FloatExpressionContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by the <c>FloatExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitFloatExpression([NotNull] PineScriptParser.FloatExpressionContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by the <c>GroupExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterGroupExpression([NotNull] PineScriptParser.GroupExpressionContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by the <c>GroupExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitGroupExpression([NotNull] PineScriptParser.GroupExpressionContext context) { }
-	/// <summary>
 	/// Enter a parse tree produced by the <c>FunctionCallExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -343,20 +313,6 @@ public partial class PineScriptBaseListener : IPineScriptListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitFunctionCallExpression([NotNull] PineScriptParser.FunctionCallExpressionContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by the <c>BoolExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterBoolExpression([NotNull] PineScriptParser.BoolExpressionContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by the <c>BoolExpression</c>
-	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitBoolExpression([NotNull] PineScriptParser.BoolExpressionContext context) { }
-	/// <summary>
 	/// Enter a parse tree produced by the <c>IdentifierExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -370,6 +326,90 @@ public partial class PineScriptBaseListener : IPineScriptListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitIdentifierExpression([NotNull] PineScriptParser.IdentifierExpressionContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by the <c>IntLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterIntLiteral([NotNull] PineScriptParser.IntLiteralContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>IntLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitIntLiteral([NotNull] PineScriptParser.IntLiteralContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by the <c>FloatLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterFloatLiteral([NotNull] PineScriptParser.FloatLiteralContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>FloatLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitFloatLiteral([NotNull] PineScriptParser.FloatLiteralContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by the <c>BoolLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterBoolLiteral([NotNull] PineScriptParser.BoolLiteralContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>BoolLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitBoolLiteral([NotNull] PineScriptParser.BoolLiteralContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by the <c>StringLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterStringLiteral([NotNull] PineScriptParser.StringLiteralContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>StringLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitStringLiteral([NotNull] PineScriptParser.StringLiteralContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by the <c>ColorLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterColorLiteral([NotNull] PineScriptParser.ColorLiteralContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>ColorLiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitColorLiteral([NotNull] PineScriptParser.ColorLiteralContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by the <c>NALiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterNALiteral([NotNull] PineScriptParser.NALiteralContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>NALiteral</c>
+	/// labeled alternative in <see cref="PineScriptParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitNALiteral([NotNull] PineScriptParser.NALiteralContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.seriesAccess"/>.
 	/// <para>The default implementation does nothing.</para>
