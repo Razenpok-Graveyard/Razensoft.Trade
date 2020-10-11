@@ -1,0 +1,1 @@
+java -jar antlr-4.8-complete.jar -Dlanguage=CSharp -visitor PineScript.g4

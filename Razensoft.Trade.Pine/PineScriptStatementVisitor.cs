@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Antlr4.Runtime.Tree;
 using Razensoft.Trade.Pine.Statements;
 
 namespace Razensoft.Trade.Pine
@@ -9,74 +8,79 @@ namespace Razensoft.Trade.Pine
     {
         public override PineScriptStatement VisitBlock(PineScriptParser.BlockContext context)
         {
-            var statements = context.statement().Select(Visit).ToArray();
+            var statements = context.statementList().statement().Select(Visit).ToArray();
             return new StatementBlock(statements);
         }
 
-        public override PineScriptStatement VisitVariableDeclaration(PineScriptParser.VariableDeclarationContext context)
+        public override PineScriptStatement VisitVariableDeclarationStatement(PineScriptParser.VariableDeclarationStatementContext context)
         {
-            var name = context.ID().GetText();
+            var name = context.Identifier().GetText();
             var value = context.variableValue().Accept(this);
             return new VariableDeclarationStatement(name, value);
         }
 
-        public override PineScriptStatement VisitVariableAssignment(PineScriptParser.VariableAssignmentContext context)
+        public override PineScriptStatement VisitVariableAssignmentStatement(PineScriptParser.VariableAssignmentStatementContext context)
         {
-            var name = context.ID().GetText();
+            var name = context.Identifier().GetText();
             var value = context.variableValue().Accept(this);
             return new VariableAssignmentStatement(name, value);
         }
 
-        public override PineScriptStatement VisitFunctionDeclaration(PineScriptParser.FunctionDeclarationContext context)
+        public override PineScriptStatement VisitFunctionDeclarationStatement(PineScriptParser.FunctionDeclarationStatementContext context)
         {
-            var name = context.name.Text;
-            var parameters = context.functionParameters()
-                .ID()
-                .Select(id => id.GetText())
-                .ToArray();
+            var name = context.Identifier().GetText();
+            var parameters = new string[0];
+            if (context.functionParameters() != null)
+            {
+                parameters = context.functionParameters()?
+                    .Identifier()
+                    .Select(id => id.GetText())
+                    .ToArray();
+            }
             var body = context.functionBody().Accept(this);
             return new FunctionDeclarationStatement(name, parameters, body);
         }
 
-        public override PineScriptStatement VisitFunctionCall(PineScriptParser.FunctionCallContext context)
+        public override PineScriptStatement VisitFunctionCallStatement(PineScriptParser.FunctionCallStatementContext context)
         {
-            var name = context.ID().GetText();
-            var functionArguments = context.functionArguments().children
-                                    ?? Enumerable.Empty<IParseTree>();
-            var args = functionArguments
-                .Select(token => token.Accept(this))
-                .Where(arg => arg != null)
+            var name = context.Identifier().GetText();
+            if (context.functionArguments() == null)
+            {
+                return new FunctionCallStatement(name, new PineScriptStatement[0], new PineScriptStatement[0]);
+            }
+
+            var arguments = context.functionArguments();
+            var positionalArgs = arguments._positional
+                .Select(e => e.Accept(this))
                 .ToArray();
-            return new FunctionCallStatement(name, args);
+            var namedArgs = arguments._named
+                .Select(e => new VariableDeclarationStatement(e.Identifier().GetText(), e.expression().Accept(this)))
+                .Cast<PineScriptStatement>()
+                .ToArray();
+            return new FunctionCallStatement(name, positionalArgs, namedArgs);
         }
 
-        public override PineScriptStatement VisitConditional(PineScriptParser.ConditionalContext context)
+        public override PineScriptStatement VisitIfStatement(PineScriptParser.IfStatementContext context)
         {
             var condition = context.expression().Accept(this);
-            var thenBlock = context.GetChild(2).Accept(this);
-            var elseBlock = context.ChildCount > 3
-                ? context.GetChild(4).Accept(this)
+            var thenBlock = context.block().Accept(this);
+            var elseBlock = context.ifStatementElseBody() != null
+                ? context.ifStatementElseBody().Accept(this)
                 : null;
             return new ConditionalStatement(condition, thenBlock, elseBlock);
         }
 
-        public override PineScriptStatement VisitLoop(PineScriptParser.LoopContext context)
+        public override PineScriptStatement VisitForStatement(PineScriptParser.ForStatementContext context)
         {
-            var counterDeclaration = context.variableDeclaration().Accept(this);
-            var endValue = context.expression().Accept(this);
-            var body = context.variableDeclaration().Accept(this);
+            var counterDeclaration = context.forStatementCounter().Accept(this);
+            var endValue = context.end.Accept(this);
+            var body = context.forStatementBody().Accept(this);
             var step = 1;
-            var stepToken = context.INT_LITERAL();
-            if (stepToken != null)
+            if (context.step != null)
             {
-                step = int.Parse(stepToken.GetText());
+                step = int.Parse(context.step.GetText());
             }
             return new LoopStatement(counterDeclaration, endValue, body, step);
-        }
-
-        public override PineScriptStatement VisitFunctionCallExpression(PineScriptParser.FunctionCallExpressionContext context)
-        {
-            return context.functionCall().Accept(this);
         }
 
         public override PineScriptStatement VisitNotExpression(PineScriptParser.NotExpressionContext context)
@@ -131,10 +135,10 @@ namespace Razensoft.Trade.Pine
         public override PineScriptStatement VisitIdentifierExpression(PineScriptParser.IdentifierExpressionContext context)
         {
             PineScriptStatement statement;
-            var id = context.ID();
+            var id = context.Identifier();
             if (id != null)
             {
-                var name = context.ID().GetText();
+                var name = context.Identifier().GetText();
                 statement = new IdentifierExpression(name);
             }
             else
@@ -169,9 +173,14 @@ namespace Razensoft.Trade.Pine
             return new LiteralStatement(bool.Parse(context.GetText()));
         }
 
+        public override PineScriptStatement VisitNALiteral(PineScriptParser.NALiteralContext context)
+        {
+            return new LiteralStatement(PineNA.NA);
+        }
+
         public override PineScriptStatement VisitSeriesAccess(PineScriptParser.SeriesAccessContext context)
         {
-            var name = context.ID().GetText();
+            var name = context.Identifier().GetText();
             var identifierStatement = new IdentifierExpression(name);
             var expression = context.expression().Accept(this);
             return new SeriesAccessExpression(identifierStatement, expression);

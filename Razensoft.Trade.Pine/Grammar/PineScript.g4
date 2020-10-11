@@ -16,10 +16,10 @@ statement
     | variableAssignmentStatement
     | functionDeclarationStatement
     | functionCallStatement
-    | conditional
-    | loop
-    | return
-    | break
+    | ifStatement
+    | forStatement
+//  | returnExpression
+//  | breakExpression
     ;
 
 statementList
@@ -36,8 +36,8 @@ variableAssignmentStatement
 
 variableValue
     : expression
-    | conditional
-    | loop
+    | ifStatement
+    | forStatement
     ;
 
 functionDeclarationStatement
@@ -58,37 +58,33 @@ functionCallStatement
     ;
 
 functionArguments
-    : positionalFunctionArgument (',' positionalFunctionArgument)* (',' namedFunctionArgument)*
-    | namedFunctionArgument (',' namedFunctionArgument)*
-    ;
-
-positionalFunctionArgument
-    : expression
+    : positional+=expression (',' positional+=expression)* (',' named+=namedFunctionArgument)*
+    | named+=namedFunctionArgument (',' named+=namedFunctionArgument)*
     ;
 
 namedFunctionArgument
     : Identifier '=' expression
     ;
 
-conditional
-    : If condition=expression then=block (Else else=conditionalElseBody)?
+ifStatement
+    : If expression block (Else ifStatementElseBody)?
     ;
 
-conditionalElseBody
-    : conditional
+ifStatementElseBody
+    : ifStatement
     | block
     ;
 
-loop
-    : 'for' loopCounter 'to' end=expression ('by' step=expression)? BEGIN loopBody END
+forStatement
+    : 'for' forStatementCounter 'to' end=expression ('by' step=expression)? Begin forStatementBody End
     ;
 
-loopCounter
+forStatementCounter
     : Identifier '=' expression
     ;
 
-loopBody
-    : (statement | BREAK | CONTINUE)+
+forStatementBody
+    : (statement | 'break' | 'continue')+
     ;
 
 expression
@@ -108,15 +104,15 @@ expression
     ;
 
 literal
-    : INT_LITERAL       # IntLiteral
-    | FLOAT_LITERAL     # FloatLiteral
-    | BOOL_LITERAL      # BoolLiteral
-    | STR_LITERAL       # StringLiteral
-    | COLOR_LITERAL     # ColorLiteral
-    | 'na'              # NALiteral;
+    : IntLiteral       # IntLiteral
+    | FloatLiteral     # FloatLiteral
+    | BoolLiteral      # BoolLiteral
+    | StringLiteral    # StringLiteral
+    | ColorLiteral     # ColorLiteral
+    | NALiteral        # NALiteral;
     
 seriesAccess
-    : Identifier LSQBR expression RSQBR
+    : Identifier OpenBracket expression CloseBracket
     ;
 
 
@@ -164,13 +160,13 @@ Continue:                       'continue';
 
 NALiteral:                      'na';
 
-IntegerLiteral:                 IntegerPart;
+IntLiteral:                     IntegerPart;
 
 FloatLiteral:                   IntegerPart '.' FractionPart ExponentPart?
             |                   '.' FractionPart ExponentPart?
             |                   IntegerPart ExponentPart;
 
-BooleanLiteral:                 'true'
+BoolLiteral:                    'true'
               |                 'false';
 
 StringLiteral:                  '"' (~["\\\n] | EscapeCharacter)* '"'
@@ -218,7 +214,7 @@ fragment IdentifierStart
 
 fragment IdentifierPart
     : IdentifierLetter
-    | [0-9]
+    | [0-9.]
     ;
 
 fragment IdentifierLetter

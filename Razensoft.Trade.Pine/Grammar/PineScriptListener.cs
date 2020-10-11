@@ -61,25 +61,35 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitStatement([NotNull] PineScriptParser.StatementContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.variableDeclaration"/>.
+	/// Enter a parse tree produced by <see cref="PineScriptParser.statementList"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterVariableDeclaration([NotNull] PineScriptParser.VariableDeclarationContext context);
+	void EnterStatementList([NotNull] PineScriptParser.StatementListContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.variableDeclaration"/>.
+	/// Exit a parse tree produced by <see cref="PineScriptParser.statementList"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitVariableDeclaration([NotNull] PineScriptParser.VariableDeclarationContext context);
+	void ExitStatementList([NotNull] PineScriptParser.StatementListContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.variableAssignment"/>.
+	/// Enter a parse tree produced by <see cref="PineScriptParser.variableDeclarationStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterVariableAssignment([NotNull] PineScriptParser.VariableAssignmentContext context);
+	void EnterVariableDeclarationStatement([NotNull] PineScriptParser.VariableDeclarationStatementContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.variableAssignment"/>.
+	/// Exit a parse tree produced by <see cref="PineScriptParser.variableDeclarationStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitVariableAssignment([NotNull] PineScriptParser.VariableAssignmentContext context);
+	void ExitVariableDeclarationStatement([NotNull] PineScriptParser.VariableDeclarationStatementContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="PineScriptParser.variableAssignmentStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterVariableAssignmentStatement([NotNull] PineScriptParser.VariableAssignmentStatementContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="PineScriptParser.variableAssignmentStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitVariableAssignmentStatement([NotNull] PineScriptParser.VariableAssignmentStatementContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.variableValue"/>.
 	/// </summary>
@@ -91,15 +101,15 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitVariableValue([NotNull] PineScriptParser.VariableValueContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.functionDeclaration"/>.
+	/// Enter a parse tree produced by <see cref="PineScriptParser.functionDeclarationStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterFunctionDeclaration([NotNull] PineScriptParser.FunctionDeclarationContext context);
+	void EnterFunctionDeclarationStatement([NotNull] PineScriptParser.FunctionDeclarationStatementContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.functionDeclaration"/>.
+	/// Exit a parse tree produced by <see cref="PineScriptParser.functionDeclarationStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitFunctionDeclaration([NotNull] PineScriptParser.FunctionDeclarationContext context);
+	void ExitFunctionDeclarationStatement([NotNull] PineScriptParser.FunctionDeclarationStatementContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.functionParameters"/>.
 	/// </summary>
@@ -121,15 +131,15 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitFunctionBody([NotNull] PineScriptParser.FunctionBodyContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.functionCall"/>.
+	/// Enter a parse tree produced by <see cref="PineScriptParser.functionCallStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterFunctionCall([NotNull] PineScriptParser.FunctionCallContext context);
+	void EnterFunctionCallStatement([NotNull] PineScriptParser.FunctionCallStatementContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.functionCall"/>.
+	/// Exit a parse tree produced by <see cref="PineScriptParser.functionCallStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitFunctionCall([NotNull] PineScriptParser.FunctionCallContext context);
+	void ExitFunctionCallStatement([NotNull] PineScriptParser.FunctionCallStatementContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.functionArguments"/>.
 	/// </summary>
@@ -141,45 +151,65 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitFunctionArguments([NotNull] PineScriptParser.FunctionArgumentsContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.conditional"/>.
+	/// Enter a parse tree produced by <see cref="PineScriptParser.namedFunctionArgument"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterConditional([NotNull] PineScriptParser.ConditionalContext context);
+	void EnterNamedFunctionArgument([NotNull] PineScriptParser.NamedFunctionArgumentContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.conditional"/>.
+	/// Exit a parse tree produced by <see cref="PineScriptParser.namedFunctionArgument"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitConditional([NotNull] PineScriptParser.ConditionalContext context);
+	void ExitNamedFunctionArgument([NotNull] PineScriptParser.NamedFunctionArgumentContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.conditionalElseBody"/>.
+	/// Enter a parse tree produced by <see cref="PineScriptParser.ifStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterConditionalElseBody([NotNull] PineScriptParser.ConditionalElseBodyContext context);
+	void EnterIfStatement([NotNull] PineScriptParser.IfStatementContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.conditionalElseBody"/>.
+	/// Exit a parse tree produced by <see cref="PineScriptParser.ifStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitConditionalElseBody([NotNull] PineScriptParser.ConditionalElseBodyContext context);
+	void ExitIfStatement([NotNull] PineScriptParser.IfStatementContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.loop"/>.
+	/// Enter a parse tree produced by <see cref="PineScriptParser.ifStatementElseBody"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterLoop([NotNull] PineScriptParser.LoopContext context);
+	void EnterIfStatementElseBody([NotNull] PineScriptParser.IfStatementElseBodyContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.loop"/>.
+	/// Exit a parse tree produced by <see cref="PineScriptParser.ifStatementElseBody"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitLoop([NotNull] PineScriptParser.LoopContext context);
+	void ExitIfStatementElseBody([NotNull] PineScriptParser.IfStatementElseBodyContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.loopBody"/>.
+	/// Enter a parse tree produced by <see cref="PineScriptParser.forStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterLoopBody([NotNull] PineScriptParser.LoopBodyContext context);
+	void EnterForStatement([NotNull] PineScriptParser.ForStatementContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.loopBody"/>.
+	/// Exit a parse tree produced by <see cref="PineScriptParser.forStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitLoopBody([NotNull] PineScriptParser.LoopBodyContext context);
+	void ExitForStatement([NotNull] PineScriptParser.ForStatementContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="PineScriptParser.forStatementCounter"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterForStatementCounter([NotNull] PineScriptParser.ForStatementCounterContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="PineScriptParser.forStatementCounter"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitForStatementCounter([NotNull] PineScriptParser.ForStatementCounterContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="PineScriptParser.forStatementBody"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterForStatementBody([NotNull] PineScriptParser.ForStatementBodyContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="PineScriptParser.forStatementBody"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitForStatementBody([NotNull] PineScriptParser.ForStatementBodyContext context);
 	/// <summary>
 	/// Enter a parse tree produced by the <c>ParenthesizedExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.

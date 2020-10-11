@@ -6,7 +6,7 @@ namespace Razensoft.Trade.Pine
 {
     public class PineScriptVisitor : PineScriptBaseVisitor<IEnumerable<PineScriptStatement>>
     {
-        public override IEnumerable<PineScriptStatement> VisitScript(PineScriptParser.ScriptContext context)
+        public override IEnumerable<PineScriptStatement> VisitStatementList(PineScriptParser.StatementListContext context)
         {
             return context.statement()
                 .Select((statement, _) =>

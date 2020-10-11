@@ -5,22 +5,22 @@ namespace Razensoft.Trade.Pine.Statements
     public class FunctionCallStatement : PineScriptStatement
     {
         private readonly string _name;
-        private readonly PineScriptStatement[] _args;
+        private readonly PineScriptStatement[] _positionalArgs;
+        private readonly PineScriptStatement[] _namedArgs;
 
-        public FunctionCallStatement(string name, PineScriptStatement[] args)
+        public FunctionCallStatement(string name, PineScriptStatement[] positionalArgs, PineScriptStatement[] namedArgs)
         {
             _name = name;
-            _args = args;
+            _positionalArgs = positionalArgs;
+            _namedArgs = namedArgs;
         }
 
         public override object Execute(PineScriptExecutionContext context)
         {
-            var positionalArgs = _args
-                .TakeWhile(arg => arg is ExpressionStatement || arg is TernaryExpression)
+            var positionalArgs = _positionalArgs
                 .Select(arg => arg.Execute(context))
                 .ToArray();
-            var namedArgs = _args
-                .Skip(positionalArgs.Length)
+            var namedArgs = _namedArgs
                 .Cast<VariableDeclarationStatement>()
                 .ToDictionary(
                     s => s.Name,

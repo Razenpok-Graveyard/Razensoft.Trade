@@ -50,17 +50,23 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitStatement([NotNull] PineScriptParser.StatementContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.variableDeclaration"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.statementList"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitVariableDeclaration([NotNull] PineScriptParser.VariableDeclarationContext context);
+	Result VisitStatementList([NotNull] PineScriptParser.StatementListContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.variableAssignment"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.variableDeclarationStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitVariableAssignment([NotNull] PineScriptParser.VariableAssignmentContext context);
+	Result VisitVariableDeclarationStatement([NotNull] PineScriptParser.VariableDeclarationStatementContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="PineScriptParser.variableAssignmentStatement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVariableAssignmentStatement([NotNull] PineScriptParser.VariableAssignmentStatementContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.variableValue"/>.
 	/// </summary>
@@ -68,11 +74,11 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitVariableValue([NotNull] PineScriptParser.VariableValueContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.functionDeclaration"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.functionDeclarationStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitFunctionDeclaration([NotNull] PineScriptParser.FunctionDeclarationContext context);
+	Result VisitFunctionDeclarationStatement([NotNull] PineScriptParser.FunctionDeclarationStatementContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.functionParameters"/>.
 	/// </summary>
@@ -86,11 +92,11 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitFunctionBody([NotNull] PineScriptParser.FunctionBodyContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.functionCall"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.functionCallStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitFunctionCall([NotNull] PineScriptParser.FunctionCallContext context);
+	Result VisitFunctionCallStatement([NotNull] PineScriptParser.FunctionCallStatementContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.functionArguments"/>.
 	/// </summary>
@@ -98,29 +104,41 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitFunctionArguments([NotNull] PineScriptParser.FunctionArgumentsContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.conditional"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.namedFunctionArgument"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitConditional([NotNull] PineScriptParser.ConditionalContext context);
+	Result VisitNamedFunctionArgument([NotNull] PineScriptParser.NamedFunctionArgumentContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.conditionalElseBody"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.ifStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitConditionalElseBody([NotNull] PineScriptParser.ConditionalElseBodyContext context);
+	Result VisitIfStatement([NotNull] PineScriptParser.IfStatementContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.loop"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.ifStatementElseBody"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitLoop([NotNull] PineScriptParser.LoopContext context);
+	Result VisitIfStatementElseBody([NotNull] PineScriptParser.IfStatementElseBodyContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.loopBody"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.forStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitLoopBody([NotNull] PineScriptParser.LoopBodyContext context);
+	Result VisitForStatement([NotNull] PineScriptParser.ForStatementContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="PineScriptParser.forStatementCounter"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitForStatementCounter([NotNull] PineScriptParser.ForStatementCounterContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="PineScriptParser.forStatementBody"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitForStatementBody([NotNull] PineScriptParser.ForStatementBodyContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>ParenthesizedExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.

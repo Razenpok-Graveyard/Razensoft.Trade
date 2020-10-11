@@ -150,7 +150,8 @@ namespace Razensoft.Trade.Pine.Ast
     {
         public override PineScriptAst VisitScript(PineScriptParser.ScriptContext context)
         {
-            var statements = context.statement()
+            var statements = context.statementList()
+                .statement()
                 .Select((statement, _) =>
                 {
                     var visitor = new PineScriptParseNodeVisitor();
@@ -170,55 +171,57 @@ namespace Razensoft.Trade.Pine.Ast
             return base.VisitStatement(context);
         }
 
-        public override PineScriptAstNode VisitVariableDeclaration(PineScriptParser.VariableDeclarationContext context)
+        public override PineScriptAstNode VisitVariableDeclarationStatement(PineScriptParser.VariableDeclarationStatementContext context)
         {
-            var name = new VariableNameAstNode(context.ID().GetText());
+            var name = new VariableNameAstNode(context.Identifier().GetText());
             var value = context.variableValue().Accept(this);
             return new VariableDeclarationAstNode(name, value);
         }
 
-        public override PineScriptAstNode VisitVariableAssignment(PineScriptParser.VariableAssignmentContext context)
+        public override PineScriptAstNode VisitVariableAssignmentStatement(PineScriptParser.VariableAssignmentStatementContext context)
         {
-            var name = new VariableNameAstNode(context.ID().GetText());
+            var name = new VariableNameAstNode(context.Identifier().GetText());
             var value = context.variableValue().Accept(this);
             return new VariableAssignmentAstNode(name, value);
         }
 
-        public override PineScriptAstNode VisitVariableValue(PineScriptParser.VariableValueContext context)
+        public override PineScriptAstNode VisitFunctionDeclarationStatement(PineScriptParser.FunctionDeclarationStatementContext context)
         {
-            return context.GetChild(0).Accept(this);
-        }
-
-        public override PineScriptAstNode VisitFunctionDeclaration(PineScriptParser.FunctionDeclarationContext context)
-        {
-            var name = new FunctionNameAstNode(context.ID().GetText());
+            var name = new FunctionNameAstNode(context.Identifier().GetText());
             var parameters = context.functionParameters()
-                .ID()
+                .Identifier()
                 .Select(id => new VariableNameAstNode(id.GetText()))
                 .ToList();
             var body = context.functionBody().Accept(this);
             return new FunctionDeclarationAstNode(name, parameters, body);
         }
 
-        public override PineScriptAstNode VisitFunctionCall(PineScriptParser.FunctionCallContext context)
+        public override PineScriptAstNode VisitFunctionCallStatement(PineScriptParser.FunctionCallStatementContext context)
         {
-            var name = new FunctionNameAstNode(context.ID().GetText());
+            var name = new FunctionNameAstNode(context.Identifier().GetText());
             var functionArguments = context.functionArguments();
-            var positionalArgs = functionArguments.expression()
+            var positionalArgs = functionArguments
+                ._positional
                 .Select(e => e.Accept(this))
                 .ToList();
-            var namedArgs = functionArguments.variableDeclaration()
+            var namedArgs = functionArguments._named
                 .Select(e => e.Accept(this))
                 .Cast<VariableDeclarationAstNode>()
                 .ToList();
             return new FunctionCallAstNode(name, positionalArgs, namedArgs);
         }
 
-        public override PineScriptAstNode VisitConditional(PineScriptParser.ConditionalContext context)
+        public override PineScriptAstNode VisitNamedFunctionArgument(PineScriptParser.NamedFunctionArgumentContext context)
         {
-            var condition = context.condition.Accept(this);
-            var thenBlock = context.then.Accept(this);
-            var elseBlock = context.@else?.GetChild(0).Accept(this);
+            var name = new VariableNameAstNode(context.Identifier().GetText());
+            return new VariableDeclarationAstNode(name, context.expression().Accept(this));
+        }
+
+        public override PineScriptAstNode VisitIfStatement(PineScriptParser.IfStatementContext context)
+        {
+            var condition = context.expression().Accept(this);
+            var thenBlock = context.block().Accept(this);
+            var elseBlock = context.ifStatementElseBody()?.GetChild(0).Accept(this);
             return new ConditionalAstNode(condition, thenBlock, elseBlock);
         }
 

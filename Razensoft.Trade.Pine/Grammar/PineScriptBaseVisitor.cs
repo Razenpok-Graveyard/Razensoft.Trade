@@ -64,7 +64,7 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// <return>The visitor result.</return>
 	public virtual Result VisitStatement([NotNull] PineScriptParser.StatementContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.variableDeclaration"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.statementList"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -72,9 +72,9 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitVariableDeclaration([NotNull] PineScriptParser.VariableDeclarationContext context) { return VisitChildren(context); }
+	public virtual Result VisitStatementList([NotNull] PineScriptParser.StatementListContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.variableAssignment"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.variableDeclarationStatement"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -82,7 +82,17 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitVariableAssignment([NotNull] PineScriptParser.VariableAssignmentContext context) { return VisitChildren(context); }
+	public virtual Result VisitVariableDeclarationStatement([NotNull] PineScriptParser.VariableDeclarationStatementContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="PineScriptParser.variableAssignmentStatement"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitVariableAssignmentStatement([NotNull] PineScriptParser.VariableAssignmentStatementContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.variableValue"/>.
 	/// <para>
@@ -94,7 +104,7 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// <return>The visitor result.</return>
 	public virtual Result VisitVariableValue([NotNull] PineScriptParser.VariableValueContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.functionDeclaration"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.functionDeclarationStatement"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -102,7 +112,7 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitFunctionDeclaration([NotNull] PineScriptParser.FunctionDeclarationContext context) { return VisitChildren(context); }
+	public virtual Result VisitFunctionDeclarationStatement([NotNull] PineScriptParser.FunctionDeclarationStatementContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.functionParameters"/>.
 	/// <para>
@@ -124,7 +134,7 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// <return>The visitor result.</return>
 	public virtual Result VisitFunctionBody([NotNull] PineScriptParser.FunctionBodyContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.functionCall"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.functionCallStatement"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -132,7 +142,7 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitFunctionCall([NotNull] PineScriptParser.FunctionCallContext context) { return VisitChildren(context); }
+	public virtual Result VisitFunctionCallStatement([NotNull] PineScriptParser.FunctionCallStatementContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.functionArguments"/>.
 	/// <para>
@@ -144,7 +154,7 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// <return>The visitor result.</return>
 	public virtual Result VisitFunctionArguments([NotNull] PineScriptParser.FunctionArgumentsContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.conditional"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.namedFunctionArgument"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -152,9 +162,9 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitConditional([NotNull] PineScriptParser.ConditionalContext context) { return VisitChildren(context); }
+	public virtual Result VisitNamedFunctionArgument([NotNull] PineScriptParser.NamedFunctionArgumentContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.conditionalElseBody"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.ifStatement"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -162,9 +172,9 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitConditionalElseBody([NotNull] PineScriptParser.ConditionalElseBodyContext context) { return VisitChildren(context); }
+	public virtual Result VisitIfStatement([NotNull] PineScriptParser.IfStatementContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.loop"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.ifStatementElseBody"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -172,9 +182,9 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitLoop([NotNull] PineScriptParser.LoopContext context) { return VisitChildren(context); }
+	public virtual Result VisitIfStatementElseBody([NotNull] PineScriptParser.IfStatementElseBodyContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.loopBody"/>.
+	/// Visit a parse tree produced by <see cref="PineScriptParser.forStatement"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -182,7 +192,27 @@ public partial class PineScriptBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitLoopBody([NotNull] PineScriptParser.LoopBodyContext context) { return VisitChildren(context); }
+	public virtual Result VisitForStatement([NotNull] PineScriptParser.ForStatementContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="PineScriptParser.forStatementCounter"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitForStatementCounter([NotNull] PineScriptParser.ForStatementCounterContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="PineScriptParser.forStatementBody"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitForStatementBody([NotNull] PineScriptParser.ForStatementBodyContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by the <c>ParenthesizedExpression</c>
 	/// labeled alternative in <see cref="PineScriptParser.expression"/>.
