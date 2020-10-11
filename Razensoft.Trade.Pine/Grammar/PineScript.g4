@@ -10,6 +10,10 @@ block
     : Begin statementList End
     ;
 
+statementList
+    : statement+
+    ;
+
 statement
     : block
     | variableDeclarationStatement
@@ -20,10 +24,6 @@ statement
     | forStatement
 //  | returnExpression
 //  | breakExpression
-    ;
-
-statementList
-    : statement+
     ;
 
 variableDeclarationStatement

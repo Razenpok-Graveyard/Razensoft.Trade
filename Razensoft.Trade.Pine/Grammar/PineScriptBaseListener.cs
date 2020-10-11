@@ -59,18 +59,6 @@ public partial class PineScriptBaseListener : IPineScriptListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitBlock([NotNull] PineScriptParser.BlockContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.statement"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterStatement([NotNull] PineScriptParser.StatementContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.statement"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitStatement([NotNull] PineScriptParser.StatementContext context) { }
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.statementList"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -82,6 +70,18 @@ public partial class PineScriptBaseListener : IPineScriptListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitStatementList([NotNull] PineScriptParser.StatementListContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="PineScriptParser.statement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterStatement([NotNull] PineScriptParser.StatementContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="PineScriptParser.statement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitStatement([NotNull] PineScriptParser.StatementContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.variableDeclarationStatement"/>.
 	/// <para>The default implementation does nothing.</para>

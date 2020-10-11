@@ -44,17 +44,17 @@ public interface IPineScriptVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitBlock([NotNull] PineScriptParser.BlockContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="PineScriptParser.statement"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitStatement([NotNull] PineScriptParser.StatementContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.statementList"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitStatementList([NotNull] PineScriptParser.StatementListContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="PineScriptParser.statement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitStatement([NotNull] PineScriptParser.StatementContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="PineScriptParser.variableDeclarationStatement"/>.
 	/// </summary>

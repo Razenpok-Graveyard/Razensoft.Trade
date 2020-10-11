@@ -51,16 +51,6 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitBlock([NotNull] PineScriptParser.BlockContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="PineScriptParser.statement"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterStatement([NotNull] PineScriptParser.StatementContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="PineScriptParser.statement"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitStatement([NotNull] PineScriptParser.StatementContext context);
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.statementList"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -70,6 +60,16 @@ public interface IPineScriptListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitStatementList([NotNull] PineScriptParser.StatementListContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="PineScriptParser.statement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterStatement([NotNull] PineScriptParser.StatementContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="PineScriptParser.statement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitStatement([NotNull] PineScriptParser.StatementContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="PineScriptParser.variableDeclarationStatement"/>.
 	/// </summary>

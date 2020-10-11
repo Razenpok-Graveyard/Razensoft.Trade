@@ -44,7 +44,7 @@ public partial class PineScriptParser : Parser {
 		IntLiteral=33, FloatLiteral=34, BoolLiteral=35, StringLiteral=36, ColorLiteral=37, 
 		Identifier=38, Begin=39, End=40, Whitespace=41;
 	public const int
-		RULE_script = 0, RULE_block = 1, RULE_statement = 2, RULE_statementList = 3, 
+		RULE_script = 0, RULE_block = 1, RULE_statementList = 2, RULE_statement = 3, 
 		RULE_variableDeclarationStatement = 4, RULE_variableAssignmentStatement = 5, 
 		RULE_variableValue = 6, RULE_functionDeclarationStatement = 7, RULE_functionParameters = 8, 
 		RULE_functionBody = 9, RULE_functionCallStatement = 10, RULE_functionArguments = 11, 
@@ -52,7 +52,7 @@ public partial class PineScriptParser : Parser {
 		RULE_forStatement = 15, RULE_forStatementCounter = 16, RULE_forStatementBody = 17, 
 		RULE_expression = 18, RULE_literal = 19, RULE_seriesAccess = 20;
 	public static readonly string[] ruleNames = {
-		"script", "block", "statement", "statementList", "variableDeclarationStatement", 
+		"script", "block", "statementList", "statement", "variableDeclarationStatement", 
 		"variableAssignmentStatement", "variableValue", "functionDeclarationStatement", 
 		"functionParameters", "functionBody", "functionCallStatement", "functionArguments", 
 		"namedFunctionArgument", "ifStatement", "ifStatementElseBody", "forStatement", 
@@ -201,6 +201,67 @@ public partial class PineScriptParser : Parser {
 		return _localctx;
 	}
 
+	public partial class StatementListContext : ParserRuleContext {
+		public StatementContext[] statement() {
+			return GetRuleContexts<StatementContext>();
+		}
+		public StatementContext statement(int i) {
+			return GetRuleContext<StatementContext>(i);
+		}
+		public StatementListContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_statementList; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			IPineScriptListener typedListener = listener as IPineScriptListener;
+			if (typedListener != null) typedListener.EnterStatementList(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			IPineScriptListener typedListener = listener as IPineScriptListener;
+			if (typedListener != null) typedListener.ExitStatementList(this);
+		}
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IPineScriptVisitor<TResult> typedVisitor = visitor as IPineScriptVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitStatementList(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public StatementListContext statementList() {
+		StatementListContext _localctx = new StatementListContext(Context, State);
+		EnterRule(_localctx, 4, RULE_statementList);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 49;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			do {
+				{
+				{
+				State = 48; statement();
+				}
+				}
+				State = 51;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << If) | (1L << For) | (1L << Identifier) | (1L << Begin))) != 0) );
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
 	public partial class StatementContext : ParserRuleContext {
 		public BlockContext block() {
 			return GetRuleContext<BlockContext>(0);
@@ -246,114 +307,53 @@ public partial class PineScriptParser : Parser {
 	[RuleVersion(0)]
 	public StatementContext statement() {
 		StatementContext _localctx = new StatementContext(Context, State);
-		EnterRule(_localctx, 4, RULE_statement);
+		EnterRule(_localctx, 6, RULE_statement);
 		try {
-			State = 55;
+			State = 60;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,0,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,1,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 48; block();
+				State = 53; block();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 49; variableDeclarationStatement();
+				State = 54; variableDeclarationStatement();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 50; variableAssignmentStatement();
+				State = 55; variableAssignmentStatement();
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 51; functionDeclarationStatement();
+				State = 56; functionDeclarationStatement();
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 52; functionCallStatement();
+				State = 57; functionCallStatement();
 				}
 				break;
 			case 6:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 53; ifStatement();
+				State = 58; ifStatement();
 				}
 				break;
 			case 7:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 54; forStatement();
+				State = 59; forStatement();
 				}
 				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class StatementListContext : ParserRuleContext {
-		public StatementContext[] statement() {
-			return GetRuleContexts<StatementContext>();
-		}
-		public StatementContext statement(int i) {
-			return GetRuleContext<StatementContext>(i);
-		}
-		public StatementListContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_statementList; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			IPineScriptListener typedListener = listener as IPineScriptListener;
-			if (typedListener != null) typedListener.EnterStatementList(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			IPineScriptListener typedListener = listener as IPineScriptListener;
-			if (typedListener != null) typedListener.ExitStatementList(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IPineScriptVisitor<TResult> typedVisitor = visitor as IPineScriptVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitStatementList(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public StatementListContext statementList() {
-		StatementListContext _localctx = new StatementListContext(Context, State);
-		EnterRule(_localctx, 6, RULE_statementList);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 58;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			do {
-				{
-				{
-				State = 57; statement();
-				}
-				}
-				State = 60;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << If) | (1L << For) | (1L << Identifier) | (1L << Begin))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -2007,10 +2007,10 @@ public partial class PineScriptParser : Parser {
 		'\x11', '\t', '\x11', '\x4', '\x12', '\t', '\x12', '\x4', '\x13', '\t', 
 		'\x13', '\x4', '\x14', '\t', '\x14', '\x4', '\x15', '\t', '\x15', '\x4', 
 		'\x16', '\t', '\x16', '\x3', '\x2', '\x3', '\x2', '\x3', '\x3', '\x3', 
-		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x4', '\x3', '\x4', '\x3', 
-		'\x4', '\x3', '\x4', '\x3', '\x4', '\x3', '\x4', '\x3', '\x4', '\x5', 
-		'\x4', ':', '\n', '\x4', '\x3', '\x5', '\x6', '\x5', '=', '\n', '\x5', 
-		'\r', '\x5', '\xE', '\x5', '>', '\x3', '\x6', '\x3', '\x6', '\x3', '\x6', 
+		'\x3', '\x3', '\x3', '\x3', '\x3', '\x3', '\x4', '\x6', '\x4', '\x34', 
+		'\n', '\x4', '\r', '\x4', '\xE', '\x4', '\x35', '\x3', '\x5', '\x3', '\x5', 
+		'\x3', '\x5', '\x3', '\x5', '\x3', '\x5', '\x3', '\x5', '\x3', '\x5', 
+		'\x5', '\x5', '?', '\n', '\x5', '\x3', '\x6', '\x3', '\x6', '\x3', '\x6', 
 		'\x3', '\x6', '\x3', '\a', '\x3', '\a', '\x3', '\a', '\x3', '\a', '\x3', 
 		'\b', '\x3', '\b', '\x3', '\b', '\x5', '\b', 'L', '\n', '\b', '\x3', '\t', 
 		'\x3', '\t', '\x3', '\t', '\x5', '\t', 'Q', '\n', '\t', '\x3', '\t', '\x3', 
@@ -2049,7 +2049,7 @@ public partial class PineScriptParser : Parser {
 		'\x2', '\x6', '\x3', '\x2', '\r', '\xF', '\x3', '\x2', '\v', '\f', '\x3', 
 		'\x2', '\a', '\n', '\x3', '\x2', '\x5', '\x6', '\x2', '\xF7', '\x2', ',', 
 		'\x3', '\x2', '\x2', '\x2', '\x4', '.', '\x3', '\x2', '\x2', '\x2', '\x6', 
-		'\x39', '\x3', '\x2', '\x2', '\x2', '\b', '<', '\x3', '\x2', '\x2', '\x2', 
+		'\x33', '\x3', '\x2', '\x2', '\x2', '\b', '>', '\x3', '\x2', '\x2', '\x2', 
 		'\n', '@', '\x3', '\x2', '\x2', '\x2', '\f', '\x44', '\x3', '\x2', '\x2', 
 		'\x2', '\xE', 'K', '\x3', '\x2', '\x2', '\x2', '\x10', 'M', '\x3', '\x2', 
 		'\x2', '\x2', '\x12', 'V', '\x3', '\x2', '\x2', '\x2', '\x14', '`', '\x3', 
@@ -2059,24 +2059,24 @@ public partial class PineScriptParser : Parser {
 		'\x2', '\x2', '\x2', ' ', '\x91', '\x3', '\x2', '\x2', '\x2', '\"', '\x9D', 
 		'\x3', '\x2', '\x2', '\x2', '$', '\xA4', '\x3', '\x2', '\x2', '\x2', '&', 
 		'\xB7', '\x3', '\x2', '\x2', '\x2', '(', '\xDC', '\x3', '\x2', '\x2', 
-		'\x2', '*', '\xDE', '\x3', '\x2', '\x2', '\x2', ',', '-', '\x5', '\b', 
-		'\x5', '\x2', '-', '\x3', '\x3', '\x2', '\x2', '\x2', '.', '/', '\a', 
-		')', '\x2', '\x2', '/', '\x30', '\x5', '\b', '\x5', '\x2', '\x30', '\x31', 
+		'\x2', '*', '\xDE', '\x3', '\x2', '\x2', '\x2', ',', '-', '\x5', '\x6', 
+		'\x4', '\x2', '-', '\x3', '\x3', '\x2', '\x2', '\x2', '.', '/', '\a', 
+		')', '\x2', '\x2', '/', '\x30', '\x5', '\x6', '\x4', '\x2', '\x30', '\x31', 
 		'\a', '*', '\x2', '\x2', '\x31', '\x5', '\x3', '\x2', '\x2', '\x2', '\x32', 
-		':', '\x5', '\x4', '\x3', '\x2', '\x33', ':', '\x5', '\n', '\x6', '\x2', 
-		'\x34', ':', '\x5', '\f', '\a', '\x2', '\x35', ':', '\x5', '\x10', '\t', 
-		'\x2', '\x36', ':', '\x5', '\x16', '\f', '\x2', '\x37', ':', '\x5', '\x1C', 
-		'\xF', '\x2', '\x38', ':', '\x5', ' ', '\x11', '\x2', '\x39', '\x32', 
-		'\x3', '\x2', '\x2', '\x2', '\x39', '\x33', '\x3', '\x2', '\x2', '\x2', 
-		'\x39', '\x34', '\x3', '\x2', '\x2', '\x2', '\x39', '\x35', '\x3', '\x2', 
-		'\x2', '\x2', '\x39', '\x36', '\x3', '\x2', '\x2', '\x2', '\x39', '\x37', 
-		'\x3', '\x2', '\x2', '\x2', '\x39', '\x38', '\x3', '\x2', '\x2', '\x2', 
-		':', '\a', '\x3', '\x2', '\x2', '\x2', ';', '=', '\x5', '\x6', '\x4', 
-		'\x2', '<', ';', '\x3', '\x2', '\x2', '\x2', '=', '>', '\x3', '\x2', '\x2', 
-		'\x2', '>', '<', '\x3', '\x2', '\x2', '\x2', '>', '?', '\x3', '\x2', '\x2', 
-		'\x2', '?', '\t', '\x3', '\x2', '\x2', '\x2', '@', '\x41', '\a', '(', 
-		'\x2', '\x2', '\x41', '\x42', '\a', '\x16', '\x2', '\x2', '\x42', '\x43', 
-		'\x5', '\xE', '\b', '\x2', '\x43', '\v', '\x3', '\x2', '\x2', '\x2', '\x44', 
+		'\x34', '\x5', '\b', '\x5', '\x2', '\x33', '\x32', '\x3', '\x2', '\x2', 
+		'\x2', '\x34', '\x35', '\x3', '\x2', '\x2', '\x2', '\x35', '\x33', '\x3', 
+		'\x2', '\x2', '\x2', '\x35', '\x36', '\x3', '\x2', '\x2', '\x2', '\x36', 
+		'\a', '\x3', '\x2', '\x2', '\x2', '\x37', '?', '\x5', '\x4', '\x3', '\x2', 
+		'\x38', '?', '\x5', '\n', '\x6', '\x2', '\x39', '?', '\x5', '\f', '\a', 
+		'\x2', ':', '?', '\x5', '\x10', '\t', '\x2', ';', '?', '\x5', '\x16', 
+		'\f', '\x2', '<', '?', '\x5', '\x1C', '\xF', '\x2', '=', '?', '\x5', ' ', 
+		'\x11', '\x2', '>', '\x37', '\x3', '\x2', '\x2', '\x2', '>', '\x38', '\x3', 
+		'\x2', '\x2', '\x2', '>', '\x39', '\x3', '\x2', '\x2', '\x2', '>', ':', 
+		'\x3', '\x2', '\x2', '\x2', '>', ';', '\x3', '\x2', '\x2', '\x2', '>', 
+		'<', '\x3', '\x2', '\x2', '\x2', '>', '=', '\x3', '\x2', '\x2', '\x2', 
+		'?', '\t', '\x3', '\x2', '\x2', '\x2', '@', '\x41', '\a', '(', '\x2', 
+		'\x2', '\x41', '\x42', '\a', '\x16', '\x2', '\x2', '\x42', '\x43', '\x5', 
+		'\xE', '\b', '\x2', '\x43', '\v', '\x3', '\x2', '\x2', '\x2', '\x44', 
 		'\x45', '\a', '(', '\x2', '\x2', '\x45', '\x46', '\a', '\x17', '\x2', 
 		'\x2', '\x46', 'G', '\x5', '\xE', '\b', '\x2', 'G', '\r', '\x3', '\x2', 
 		'\x2', '\x2', 'H', 'L', '\x5', '&', '\x14', '\x2', 'I', 'L', '\x5', '\x1C', 
@@ -2135,7 +2135,7 @@ public partial class PineScriptParser : Parser {
 		'\x9C', '\a', '*', '\x2', '\x2', '\x9C', '!', '\x3', '\x2', '\x2', '\x2', 
 		'\x9D', '\x9E', '\a', '(', '\x2', '\x2', '\x9E', '\x9F', '\a', '\x16', 
 		'\x2', '\x2', '\x9F', '\xA0', '\x5', '&', '\x14', '\x2', '\xA0', '#', 
-		'\x3', '\x2', '\x2', '\x2', '\xA1', '\xA5', '\x5', '\x6', '\x4', '\x2', 
+		'\x3', '\x2', '\x2', '\x2', '\xA1', '\xA5', '\x5', '\b', '\x5', '\x2', 
 		'\xA2', '\xA5', '\a', ' ', '\x2', '\x2', '\xA3', '\xA5', '\a', '!', '\x2', 
 		'\x2', '\xA4', '\xA1', '\x3', '\x2', '\x2', '\x2', '\xA4', '\xA2', '\x3', 
 		'\x2', '\x2', '\x2', '\xA4', '\xA3', '\x3', '\x2', '\x2', '\x2', '\xA5', 
@@ -2187,7 +2187,7 @@ public partial class PineScriptParser : Parser {
 		'\x2', '\xDE', '\xDF', '\a', '(', '\x2', '\x2', '\xDF', '\xE0', '\a', 
 		'\x14', '\x2', '\x2', '\xE0', '\xE1', '\x5', '&', '\x14', '\x2', '\xE1', 
 		'\xE2', '\a', '\x15', '\x2', '\x2', '\xE2', '+', '\x3', '\x2', '\x2', 
-		'\x2', '\x17', '\x39', '>', 'K', 'P', '[', '`', '\x65', 'n', 'u', '}', 
+		'\x2', '\x17', '\x35', '>', 'K', 'P', '[', '`', '\x65', 'n', 'u', '}', 
 		'\x80', '\x8B', '\x8F', '\x97', '\xA4', '\xA6', '\xB1', '\xB7', '\xD1', 
 		'\xD3', '\xDC',
 	};
