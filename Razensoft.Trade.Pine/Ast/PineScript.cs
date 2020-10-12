@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime.Tree;
 
@@ -8,32 +7,6 @@ namespace Razensoft.Trade.Pine.Ast
     public class PineScriptProgram
     {
         public PineScriptAst Ast { get; }
-    }
-
-    public class PineScriptSymbolTable
-    {
-        private readonly Dictionary<string, VariableInfo> _variables = new Dictionary<string, VariableInfo>();
-        private readonly Dictionary<string, string> _functions = new Dictionary<string, string>();
-
-        public void DeclareVariable(string name, PineType type)
-        {
-            if (_variables.ContainsKey(name))
-            {
-                throw new Exception($"Variable with name '{name} is already declared");
-            }
-
-            _variables.Add(name, new VariableInfo(name, type));
-        }
-
-        public VariableInfo GetVariableInfo(string name)
-        {
-            if (!_variables.ContainsKey(name))
-            {
-                throw new Exception($"Variable with name '{name} is not declared");
-            }
-
-            return _variables[name];
-        }
     }
 
     public class VariableInfo
@@ -49,6 +22,63 @@ namespace Razensoft.Trade.Pine.Ast
         public PineType Type { get; }
     }
 
+    public class FunctionInfo
+    {
+        public FunctionInfo(string name, IReadOnlyList<string> parameters, IParseTree body)
+        {
+            Name = name;
+            Parameters = parameters;
+            Body = body;
+        }
+        
+        public string Name { get; }
+        
+        public IReadOnlyList<string> Parameters { get; }
+        
+        public IParseTree Body { get; }
+    }
+
+    public class FunctionOverloadInfo
+    {
+        public FunctionOverloadInfo(
+            FunctionInfo functionInfo,
+            PineType returnType,
+            IReadOnlyList<FunctionParameterInfo> parameters,
+            PineScriptAst body)
+        {
+            FunctionInfo = functionInfo;
+            Parameters = parameters;
+            ReturnType = returnType;
+            Body = body;
+        }
+        
+        public FunctionInfo FunctionInfo { get; }
+        
+        public IReadOnlyList<FunctionParameterInfo> Parameters { get; }
+
+        public PineType ReturnType { get; }
+        
+        public PineScriptAst Body { get; }
+
+        public bool CanAccept(IEnumerable<PineType> args)
+        {
+            return Parameters.Select(p => p.Type).SequenceEqual(args);
+        }
+    }
+
+    public class FunctionParameterInfo
+    {
+        public FunctionParameterInfo(string name, PineType type)
+        {
+            Name = name;
+            Type = type;
+        }
+        
+        public string Name { get; }
+        
+        public PineType Type { get; }
+    }
+
     public class PineScriptAst
     {
         public PineScriptAst(PineScriptAstNode root)
@@ -61,11 +91,16 @@ namespace Razensoft.Trade.Pine.Ast
 
     public abstract class PineScriptAstNode { }
 
+    public class NoopAstNode : PineScriptAstNode
+    {
+        
+    }
+
     public class StatementBlockAstNode : PineScriptAstNode
     {
         public StatementBlockAstNode(IEnumerable<PineScriptAstNode> nodes)
         {
-            Nodes = nodes;
+            Nodes = nodes.ToList();
         }
 
         public IEnumerable<PineScriptAstNode> Nodes { get; }
@@ -113,7 +148,7 @@ namespace Razensoft.Trade.Pine.Ast
     public class FunctionDeclarationAstNode : PineScriptAstNode
     {
         public FunctionDeclarationAstNode(
-            FunctionNameAstNode name,
+            string name,
             List<VariableNameAstNode> parameters,
             PineScriptAstNode body)
         {
@@ -122,7 +157,7 @@ namespace Razensoft.Trade.Pine.Ast
             Body = body;
         }
 
-        public FunctionNameAstNode Name { get; }
+        public string Name { get; }
 
         public List<VariableNameAstNode> Parameters { get; }
 
@@ -132,14 +167,14 @@ namespace Razensoft.Trade.Pine.Ast
     public class FunctionCallAstNode : PineScriptAstNode
     {
         public FunctionCallAstNode(
-            FunctionNameAstNode name,
+            string name,
             List<FunctionArgumentAstNode> args)
         {
             Name = name;
             Args = args;
         }
 
-        public FunctionNameAstNode Name { get; }
+        public string Name { get; }
 
         public List<FunctionArgumentAstNode> Args { get; }
     }
@@ -153,16 +188,6 @@ namespace Razensoft.Trade.Pine.Ast
         }
 
         public PineScriptAstNode Expression { get; }
-
-        public string Name { get; }
-    }
-
-    public class FunctionNameAstNode : PineScriptAstNode
-    {
-        public FunctionNameAstNode(string name)
-        {
-            Name = name;
-        }
 
         public string Name { get; }
     }
@@ -207,9 +232,24 @@ namespace Razensoft.Trade.Pine.Ast
                 {
                     var visitor = new PineScriptParseNodeVisitor(_symbolTable);
                     return statement.Accept(visitor);
-                });
+                })
+                .Where(s => !(s is NoopAstNode));
             var sequence = new StatementBlockAstNode(statements);
             return new PineScriptAst(sequence);
+        }
+    }
+
+    public class PineScriptFunctionOverloadVisitor : PineScriptBaseVisitor<FunctionOverloadInfo>
+    {
+        private readonly PineScriptSymbolTable _symbolTable;
+
+        public PineScriptFunctionOverloadVisitor(PineScriptSymbolTable symbolTable)
+        {
+            _symbolTable = symbolTable;
+        }
+
+        public override FunctionOverloadInfo VisitFunctionBody(PineScriptParser.FunctionBodyContext context)
+        {
         }
     }
 
@@ -220,120 +260,6 @@ namespace Razensoft.Trade.Pine.Ast
         public PineScriptTypeInferringVisitor(PineScriptSymbolTable symbolTable)
         {
             _symbolTable = symbolTable;
-        }
-    }
-
-    public class PineScriptParseNodeVisitor : PineScriptBaseVisitor<PineScriptAstNode>
-    {
-        private readonly PineScriptSymbolTable _symbolTable;
-        private readonly PineScriptTypeInferringVisitor _typeInferringVisitor;
-
-        public PineScriptParseNodeVisitor(PineScriptSymbolTable symbolTable)
-        {
-            _symbolTable = symbolTable;
-            _typeInferringVisitor = new PineScriptTypeInferringVisitor(_symbolTable);
-        }
-
-        public override PineScriptAstNode VisitBlock(PineScriptParser.BlockContext context)
-        {
-            return context.statementList().Accept(this);
-        }
-
-        public override PineScriptAstNode VisitStatementList(PineScriptParser.StatementListContext context)
-        {
-            var statements = context.statement()
-                .Select((statement, _) => statement.Accept(this));
-            return new StatementBlockAstNode(statements);
-        }
-
-        public override PineScriptAstNode VisitVariableDeclarationStatement(
-            PineScriptParser.VariableDeclarationStatementContext context)
-        {
-            var name = context.Identifier().GetText();
-            var valueContext = context.variableValue();
-            var type = InferType(valueContext);
-            _symbolTable.DeclareVariable(name, type);
-            return new VariableAssignmentAstNode(name, valueContext.Accept(this));
-        }
-
-        public override PineScriptAstNode VisitVariableAssignmentStatement(
-            PineScriptParser.VariableAssignmentStatementContext context)
-        {
-            var name = context.Identifier().GetText();
-            var valueContext = context.variableValue();
-            var valueType = InferType(valueContext);
-            var variableInfo = _symbolTable.GetVariableInfo(name);
-            var variableType = variableInfo.Type;
-            if (variableType == valueType)
-            {
-                return new VariableAssignmentAstNode(name, valueContext.Accept(this));
-            }
-
-            if (valueType.IsConvertibleTo(variableType))
-            {
-                var cast = new ValueCastAstNode(valueType, variableType, valueContext.Accept(this));
-                return new VariableAssignmentAstNode(name, cast);
-            }
-
-            throw new Exception($"Variable \"{name}\" was declared with \"{variableType}\" type. " +
-                                $"Cannot assign it expression of type \"{valueType}\".");
-        }
-
-        public override PineScriptAstNode VisitFunctionDeclarationStatement(
-            PineScriptParser.FunctionDeclarationStatementContext context)
-        {
-            var name = new FunctionNameAstNode(context.Identifier().GetText());
-            var body = context.functionBody().Accept(this);
-            if (context.functionParameters() == null)
-            {
-                return new FunctionDeclarationAstNode(name, new List<VariableNameAstNode>(), body);
-            }
-
-            var parameters = context.functionParameters()
-                .Identifier()
-                .Select(id => new VariableNameAstNode(id.GetText()))
-                .ToList();
-            return new FunctionDeclarationAstNode(name, parameters, body);
-        }
-
-        public override PineScriptAstNode VisitFunctionCallStatement(
-            PineScriptParser.FunctionCallStatementContext context)
-        {
-            var name = new FunctionNameAstNode(context.Identifier().GetText());
-            var args = new List<FunctionArgumentAstNode>();
-            if (context.functionArguments() != null)
-            {
-                var functionArguments = context.functionArguments();
-                var positionalArgs = functionArguments
-                    ._positional
-                    .Select(e => new FunctionArgumentAstNode(e.Accept(this), null));
-                args.AddRange(positionalArgs);
-                var namedArgs = functionArguments._named
-                    .Select(e => e.Accept(this))
-                    .Cast<FunctionArgumentAstNode>();
-                args.AddRange(namedArgs);
-            }
-
-            return new FunctionCallAstNode(name, args);
-        }
-
-        public override PineScriptAstNode VisitNamedFunctionArgument(
-            PineScriptParser.NamedFunctionArgumentContext context)
-        {
-            return new FunctionArgumentAstNode(context.expression().Accept(this), context.Identifier().GetText());
-        }
-
-        public override PineScriptAstNode VisitIfStatement(PineScriptParser.IfStatementContext context)
-        {
-            var condition = context.expression().Accept(this);
-            var thenBlock = context.block().Accept(this);
-            var elseBlock = context.ifStatementElseBody()?.Accept(this);
-            return new ConditionalAstNode(condition, thenBlock, elseBlock);
-        }
-
-        private PineType InferType(IParseTree context)
-        {
-            return _typeInferringVisitor.Visit(context);
         }
     }
 }
