@@ -8,8 +8,6 @@ namespace Razensoft.Trade.Pine.Ast
     public class PineScriptProgram
     {
         public PineScriptAst Ast { get; }
-
-        public
     }
 
     public class PineScriptSymbolTable
@@ -51,76 +49,6 @@ namespace Razensoft.Trade.Pine.Ast
         public PineType Type { get; }
     }
 
-    public class PineType
-    {
-        private PineType(PineDataType dataType, PineTypeForm form)
-        {
-            DataType = dataType;
-            Form = form;
-        }
-
-        public PineDataType DataType { get; }
-
-        public PineTypeForm Form { get; }
-
-        public static PineType LiteralInt { get; } = new PineType(PineDataType.Int, PineTypeForm.Literal);
-        public static PineType ConstInt { get; } = new PineType(PineDataType.Int, PineTypeForm.Const);
-        public static PineType InputInt { get; } = new PineType(PineDataType.Int, PineTypeForm.Input);
-        public static PineType SimpleInt { get; } = new PineType(PineDataType.Int, PineTypeForm.Simple);
-        public static PineType SeriesInt { get; } = new PineType(PineDataType.Int, PineTypeForm.Series);
-
-        public static PineType LiteralFloat { get; } = new PineType(PineDataType.Float, PineTypeForm.Literal);
-        public static PineType ConstFloat { get; } = new PineType(PineDataType.Float, PineTypeForm.Const);
-        public static PineType InputFloat { get; } = new PineType(PineDataType.Float, PineTypeForm.Input);
-        public static PineType SimpleFloat { get; } = new PineType(PineDataType.Float, PineTypeForm.Simple);
-        public static PineType SeriesFloat { get; } = new PineType(PineDataType.Float, PineTypeForm.Series);
-
-        public static PineType LiteralBool { get; } = new PineType(PineDataType.Bool, PineTypeForm.Literal);
-        public static PineType ConstBool { get; } = new PineType(PineDataType.Bool, PineTypeForm.Const);
-        public static PineType InputBool { get; } = new PineType(PineDataType.Bool, PineTypeForm.Input);
-        public static PineType SimpleBool { get; } = new PineType(PineDataType.Bool, PineTypeForm.Simple);
-        public static PineType SeriesBool { get; } = new PineType(PineDataType.Bool, PineTypeForm.Series);
-
-        public static PineType LiteralColor { get; } = new PineType(PineDataType.Color, PineTypeForm.Literal);
-        public static PineType ConstColor { get; } = new PineType(PineDataType.Color, PineTypeForm.Const);
-        public static PineType InputColor { get; } = new PineType(PineDataType.Color, PineTypeForm.Input);
-        public static PineType SimpleColor { get; } = new PineType(PineDataType.Color, PineTypeForm.Simple);
-        public static PineType SeriesColor { get; } = new PineType(PineDataType.Color, PineTypeForm.Series);
-
-        public static PineType LiteralString { get; } = new PineType(PineDataType.String, PineTypeForm.Literal);
-        public static PineType ConstString { get; } = new PineType(PineDataType.String, PineTypeForm.Const);
-        public static PineType InputString { get; } = new PineType(PineDataType.String, PineTypeForm.Input);
-        public static PineType SimpleString { get; } = new PineType(PineDataType.String, PineTypeForm.Simple);
-        public static PineType SeriesString { get; } = new PineType(PineDataType.String, PineTypeForm.Series);
-
-        public static PineType SeriesLine { get; } = new PineType(PineDataType.Line, PineTypeForm.Series);
-        public static PineType SeriesLabel { get; } = new PineType(PineDataType.Label, PineTypeForm.Series);
-        public static PineType SeriesPlot { get; } = new PineType(PineDataType.Plot, PineTypeForm.Series);
-        public static PineType SeriesHline { get; } = new PineType(PineDataType.Hline, PineTypeForm.Series);
-    }
-
-    public enum PineDataType
-    {
-        Int,
-        Float,
-        Bool,
-        Color,
-        String,
-        Line,
-        Label,
-        Plot,
-        Hline
-    }
-
-    public enum PineTypeForm
-    {
-        Literal,
-        Const,
-        Input,
-        Simple,
-        Series
-    }
-
     public class PineScriptAst
     {
         public PineScriptAst(PineScriptAstNode root)
@@ -131,9 +59,7 @@ namespace Razensoft.Trade.Pine.Ast
         public PineScriptAstNode Root { get; }
     }
 
-    public abstract class PineScriptAstNode
-    {
-    }
+    public abstract class PineScriptAstNode { }
 
     public class StatementBlockAstNode : PineScriptAstNode
     {
@@ -143,6 +69,22 @@ namespace Razensoft.Trade.Pine.Ast
         }
 
         public IEnumerable<PineScriptAstNode> Nodes { get; }
+    }
+
+    public class ValueCastAstNode : PineScriptAstNode
+    {
+        public ValueCastAstNode(PineType from, PineType to, PineScriptAstNode expression)
+        {
+            From = from;
+            To = to;
+            Expression = expression;
+        }
+
+        public PineType From { get; }
+
+        public PineType To { get; }
+        
+        public PineScriptAstNode Expression { get; }
     }
 
     public class VariableAssignmentAstNode : PineScriptAstNode
@@ -244,13 +186,9 @@ namespace Razensoft.Trade.Pine.Ast
         public PineScriptAstNode ElseBlock { get; }
     }
 
-    public class UnaryOperation : PineScriptAstNode
-    {
-    }
+    public class UnaryOperation : PineScriptAstNode { }
 
-    public class BinaryOperation : PineScriptAstNode
-    {
-    }
+    public class BinaryOperation : PineScriptAstNode { }
 
     public class PineScriptParseTreeVisitor : PineScriptBaseVisitor<PineScriptAst>
     {
@@ -323,8 +261,22 @@ namespace Razensoft.Trade.Pine.Ast
         {
             var name = context.Identifier().GetText();
             var valueContext = context.variableValue();
-            var type = InferType(valueContext);
-            return new VariableAssignmentAstNode(name, value);
+            var valueType = InferType(valueContext);
+            var variableInfo = _symbolTable.GetVariableInfo(name);
+            var variableType = variableInfo.Type;
+            if (variableType == valueType)
+            {
+                return new VariableAssignmentAstNode(name, valueContext.Accept(this));
+            }
+
+            if (valueType.IsConvertibleTo(variableType))
+            {
+                var cast = new ValueCastAstNode(valueType, variableType, valueContext.Accept(this));
+                return new VariableAssignmentAstNode(name, cast);
+            }
+
+            throw new Exception($"Variable \"{name}\" was declared with \"{variableType}\" type. " +
+                                $"Cannot assign it expression of type \"{valueType}\".");
         }
 
         public override PineScriptAstNode VisitFunctionDeclarationStatement(
